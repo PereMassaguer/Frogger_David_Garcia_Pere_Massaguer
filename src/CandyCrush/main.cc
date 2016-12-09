@@ -7,10 +7,10 @@
 #include "GameEngine.hh"
 
 // Game constants
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
+#define SCREEN_WIDTH 448
+#define SCREEN_HEIGHT 512
 
 int main(int argc, char* args[]) {
-	GameEngine::Run<SCREEN_WIDTH, SCREEN_HEIGHT>("ENTI Crush");
+	GameEngine::Run<SCREEN_WIDTH, SCREEN_HEIGHT>("Frogger David Garcia Pere Massaguer");
 	return 0;
 }

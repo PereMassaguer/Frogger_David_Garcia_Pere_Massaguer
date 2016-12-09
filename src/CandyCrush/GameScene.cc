@@ -15,6 +15,7 @@ using namespace Logger;
 
 GameScene::GameScene(void) : m_grid("lvl/testLvl.dat", CELL_WIDTH, CELL_HEIGHT) {
 	m_background = { { 0, 0, W.GetWidth(), W.GetHeight() }, ObjectID::BG_00 };
+	x = 288;
 }
 
 GameScene::~GameScene(void){
@@ -46,7 +47,7 @@ void GameScene::Update(void) {
 void GameScene::Draw(void) {
 	m_background.Draw(); // Render background
 	m_grid.Draw(); // Render grid
-	GUI::DrawTextShaded<FontID::FACTORY>("ENTI CRUSH",
+	GUI::DrawTextShaded<FontID::FACTORY>("PD: Frogger",
 										{ W.GetWidth() >> 1, int(W.GetHeight()*.1f), 1, 1 }, 
 										{ 190, 0, 160 }, { 50, 200, 230 }); // Render score that will be different when updated
 	GUI::DrawTextBlended<FontID::CANDY>("Score: " + std::to_string(m_score), 

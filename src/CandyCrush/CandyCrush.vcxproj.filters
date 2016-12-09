@@ -22,6 +22,12 @@
     <ClCompile Include="Grid.cc">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenuScene.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform.hh">
@@ -80,6 +86,12 @@
     </ClInclude>
     <ClInclude Include="IOManager.hh">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScene.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.hh">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
