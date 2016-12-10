@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdlib>
 #include "Button.hh"
 #include "GameScene.hh"
 #include "GUI.hh"
@@ -7,9 +8,10 @@
 
 class MainMenuScene : public Scene
 {
-	std::vector<Button> buttonList;
-	int k;
+	std::vector<Button> buttons[3];
+	
 public:
+
 	explicit MainMenuScene();
 	~MainMenuScene() override;
 
@@ -17,5 +19,7 @@ public:
 	void OnExit(void) override;
 	void Update(void) override;
 	void Draw(void) override;
-};
 
+	void setMenuSceneState(MenuSceneState v);
+};
+static MenuSceneState menuSceneState = MenuSceneState::DEFAULT;

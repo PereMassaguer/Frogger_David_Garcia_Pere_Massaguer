@@ -25,4 +25,7 @@ public:
 	static void DrawTextShaded(std::string &&msg, Transform &&transform, Color &&foregroundColor, Color &&backgroundColor) {
 		R.Push(TTF_RenderText_Shaded(R.GetFont<fontID>(), msg.c_str(), foregroundColor(), backgroundColor()), transform);
 	}
+	static void DrawBlackBackground() {
+		R.Push(SDL_CreateRGBSurface(0, W.GetWidth(), W.GetHeight(), 32, 0, 0, 0, 0), Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
+	}
 };

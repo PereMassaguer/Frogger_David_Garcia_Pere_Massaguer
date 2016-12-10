@@ -11,7 +11,7 @@
 #include "TimeManager.hh"
 
 Grid::Grid(std::string &&filename, int cellWidth, int cellHeight) {
-	auto lvlData(IOManager::LoadLevel(std::move(filename), m_rows, m_cols));
+	/*auto lvlData(IOManager::LoadLevel(std::move(filename), m_rows, m_cols));
 	cellData = new Cell*[m_rows];
 	for (int i = 0; i < m_rows; ++i) cellData[i] = new Cell[m_cols];
 	srand(unsigned(time(nullptr)));
@@ -25,7 +25,7 @@ Grid::Grid(std::string &&filename, int cellWidth, int cellHeight) {
 			CandyID(i, j) = lvlData[i][j];
 		}
 	}
-	gridState = GridState::LINE_CHECKING;
+	gridState = GridState::LINE_CHECKING;*/
 }
 
 Grid::~Grid() {
@@ -33,74 +33,9 @@ Grid::~Grid() {
 	delete[] cellData;
 }
 
-void Grid::CheckMouseSwift(const MouseCoords &mouseBegin, const MouseCoords &mouseEnd) {
-	if (gridState == GridState::WAITING) {
-		auto mouseDif = mouseEnd - mouseBegin;
-		for (int i = 0; i < m_rows; ++i) {
-			for (int j = 0; j < m_cols; ++j) {
-				if (cellData[i][j].transform.x < mouseBegin.x && 
-					cellData[i][j].transform.y < mouseBegin.y &&
-					cellData[i][j].transform.x + cellData[i][j].transform.w > mouseBegin.x && 
-					cellData[i][j].transform.y + cellData[i][j].transform.h > mouseBegin.y) {
-					switch ((abs(mouseDif.x) > abs(mouseDif.y)) ? (mouseDif.x < 0 ? MoveType::LEFT : MoveType::RIGHT) : (mouseDif.y < 0 ? MoveType::UP : MoveType::DOWN)) {
-						case MoveType::LEFT:
-						if (j - 1 > -1)	if (CandyID(i, j - 1) != ObjectID::CANDY_EMPTY)
-							gridState = GridState::SWAPPING_CANDIES, swapInfo.Set(i, j, i, j - 1, CandyTransform(i, j), CandyTransform(i, j-1)); break;
-						case MoveType::UP:
-						if (i - 1 > -1)	if (CandyID(i-1, j) != ObjectID::CANDY_EMPTY)
-							gridState = GridState::SWAPPING_CANDIES, swapInfo.Set(i, j, i - 1, j, CandyTransform(i, j), CandyTransform(i-1, j)); break;
-						case MoveType::RIGHT:
-						if (j + 1 < m_cols) if (CandyID(i, j + 1) != ObjectID::CANDY_EMPTY)
-							gridState = GridState::SWAPPING_CANDIES, swapInfo.Set(i, j, i, j + 1, CandyTransform(i, j), CandyTransform(i, j+1)); break;
-						case MoveType::DOWN:
-						if (i + 1 < m_rows) if (CandyID(i+1, j) != ObjectID::CANDY_EMPTY)
-							gridState = GridState::SWAPPING_CANDIES, swapInfo.Set(i, j, i + 1, j, CandyTransform(i, j), CandyTransform(i+1, j)); break;
-					}  break;
-				}
-			}
-		}
-	}
-}
-
-bool Grid::CheckNeighbours(int i, int j) {
-	auto id = CandyID(i, j);
-	if (j - 1 > -1 && j + 1 < m_cols)	if (id == CandyID(i, j - 1) && id == CandyID(i, j + 1)) return true; // candy is in the middle horizontally
-	if (i - 1 > -1 && i + 1 < m_rows)	if (id == CandyID(i - 1, j) && id == CandyID(i + 1, j)) return true; // candy is in the middle vertically
-	if (j - 2 > -1)						if (id == CandyID(i, j - 1) && id == CandyID(i, j - 2)) return true; // candy is in the left
-	if (i - 2 > -1)						if (id == CandyID(i - 1, j) && id == CandyID(i - 2, j)) return true; // candy is above
-	if (j + 2 < m_cols)					if (id == CandyID(i, j + 1) && id == CandyID(i, j + 2)) return true; // candy is in the right
-	if (i + 2 < m_rows)					if (id == CandyID(i + 1, j) && id == CandyID(i + 2, j)) return true; // candy is downwards
-	return false;
-}
-
-int Grid::KillNeighbours(int i, int j) {
-	auto id = CandyID(i, j);
-	std::vector<Sprite*> candies; // vector of candies to be supressed
-	std::vector<Sprite*> temp; // temp vector to check each line of candies
-	// check vertically
-	if (i + 1 < m_rows) for (int n = i+1; n < m_rows; ++n) if (id == CandyID(n, j)) temp.push_back(&cellData[n][j].candy); else break;
-	if (temp.size() > 1) candies.insert(candies.end(), temp.begin(), temp.end()); temp.clear();
-	if (i - 1 > -1) for (int n = i-1; n >= 0; --n) if (id == CandyID(n, j)) temp.push_back(&cellData[n][j].candy); else break;
-	if (temp.size() > 1) candies.insert(candies.end(), temp.begin(), temp.end()); temp.clear();
-	// check horizontally
-	if (j + 1 < m_cols) for (int n = j+1; n < m_cols; ++n) if (id == CandyID(i, n)) temp.push_back(&cellData[i][n].candy); else break;
-	if (temp.size() > 1) candies.insert(candies.end(), temp.begin(), temp.end()); temp.clear();
-	if (j - 1 > -1) for (int n = j-1; n >= 0; --n) if (id == CandyID(i, n)) temp.push_back(&cellData[i][n].candy); else break;
-	if (temp.size() > 1) candies.insert(candies.end(), temp.begin(), temp.end()); temp.clear();
-	// check if main vector is filled, and then if so, kill candy neighbours
-	if (!candies.empty()) {
-		candies.push_back(&cellData[i][j].candy);
-		for (auto c : candies) c->objectID = ObjectID::CANDY_EMPTY;
-	}
-	return int(candies.size());
-}
-
-inline int Lerp(float v0, float v1, float t) {
-	return int(fma(t, v1, fma(-t, v0, v0)));
-}
 
 void Grid::Update(int &score) {
-	switch (gridState) {
+	/*switch (gridState) {
 		case GridState::SWAPPING_CANDIES: {
 			auto fromPos = swapInfo.fromPos, toPos = swapInfo.toPos;
 			auto i0 = swapInfo.fromX, j0 = swapInfo.fromY, in = swapInfo.toX, jn = swapInfo.toY;
@@ -175,10 +110,10 @@ void Grid::Update(int &score) {
 				if (CandyID(0, i) == ObjectID::CANDY_EMPTY) CandyID(0, i) = ObjectID(rand() % int(ObjectID::CANDY_MAX)), endAdding = false;
 			gridState = (endAdding) ? GridState::WAITING : GridState::LINE_CHECKING;
 		} break;
-	}
+	}*/
 }
 
-void Grid::Draw() {
+void Grid::Draw() {/*
 	for (int i = 0; i < m_rows; ++i) for (int j = 0; j < m_cols; ++j) cellData[i][j].Draw();
 	for (int i = 0; i < m_rows; ++i) for (int j = 0; j < m_cols; ++j) if (CandyID(i, j) != ObjectID::CANDY_EMPTY) cellData[i][j].candy.Draw();
-}
+*/}
