@@ -1,6 +1,5 @@
 #pragma once
 #include "Color.hh"
-#include "GameScene.hh"
 #include "ID.hh"
 #include "InputManager.hh"
 #include "Renderer.hh"

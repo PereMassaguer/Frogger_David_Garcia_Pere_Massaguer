@@ -1,10 +1,21 @@
 #include "MainMenuScene.hh"
+#include "GameScene.hh"
 
 void SelectDifficultyVoid() {
 	menuSceneState = MenuSceneState::DIFFICULTY;
 }
 
-void StartGameVoid() {
+void StartEasyGameVoid() {
+	SM.SetCurDifficulty(Difficulty::EASY);
+	SM.SetCurScene<GameScene>();
+}
+
+void StartMediumGameVoid() {
+	SM.SetCurDifficulty(Difficulty::MEDIUM);
+	SM.SetCurScene<GameScene>();
+}
+void StartHardGameVoid() {
+	SM.SetCurDifficulty(Difficulty::HARD);
 	SM.SetCurScene<GameScene>();
 }
 
@@ -12,13 +23,13 @@ void BackToDefaultVoid() {
 	menuSceneState = MenuSceneState::DEFAULT;
 }
 
+void ShowRankingVoid() {
+	menuSceneState = MenuSceneState::RANKING;
+}
+
 void ExitGameVoid() {
 	SDL_Quit();
 	exit(0);
-}
-
-void ShowRankingVoid() {
-	menuSceneState = MenuSceneState::RANKING;
 }
 
 
@@ -26,25 +37,24 @@ MainMenuScene::MainMenuScene()
 {
 	//Call button constructor
 	Button playButton, rankingButton, exitButton;
-	playButton = Button("PLAY", Transform(W.GetWidth()*0.5, (W.GetHeight() / 2) - 50, 1, 1), WHITE);
-	rankingButton = Button("RANKING", Transform(W.GetWidth()*0.5, (W.GetHeight() / 2) + 50, 1, 1), WHITE);
-	exitButton = Button("EXIT", Transform(W.GetWidth()*0.5, (W.GetHeight() / 2) + 150, 1, 1), WHITE);
+	playButton = Button("PLAY", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 50, 1, 1), WHITE);
+	rankingButton = Button("RANKING", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 50, 1, 1), WHITE);
+	exitButton = Button("EXIT", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 150, 1, 1), WHITE);
 	
 	Button easyButton, mediumButton, hardButton, backButton;
-	easyButton = Button("EASY", Transform(W.GetWidth()*0.5 - 150, (W.GetHeight() / 2), 1, 1), GREEN);
-	mediumButton = Button("MEDIUM", Transform(W.GetWidth()*0.5, (W.GetHeight() / 2), 1, 1), ORANGE);
-	hardButton = Button("HARD", Transform(W.GetWidth()*0.5 + 150, (W.GetHeight() / 2), 1, 1), RED);
-	backButton = Button("BACK", Transform(W.GetWidth()*0.5, (W.GetHeight() / 2 + 150), 1, 1), WHITE);
+	easyButton = Button("EASY", Transform(W.GetWidth() / 2 - 150, (W.GetHeight() / 2), 1, 1), GREEN);
+	mediumButton = Button("MEDIUM", Transform(W.GetWidth() / 2, (W.GetHeight() / 2), 1, 1), ORANGE);
+	hardButton = Button("HARD", Transform(W.GetWidth() / 2 + 150, (W.GetHeight() / 2), 1, 1), RED);
+	backButton = Button("BACK", Transform(W.GetWidth() / 2, (W.GetHeight() / 2 + 150), 1, 1), WHITE);
 	
 	//Set each button behavior
 	playButton.SetButtonBehavior(SelectDifficultyVoid);
 	rankingButton.SetButtonBehavior(ShowRankingVoid);
 	exitButton.SetButtonBehavior(ExitGameVoid);
 
-
-	easyButton.SetButtonBehavior(StartGameVoid);
-	mediumButton.SetButtonBehavior(StartGameVoid);
-	hardButton.SetButtonBehavior(StartGameVoid); 
+	easyButton.SetButtonBehavior(StartEasyGameVoid);
+	mediumButton.SetButtonBehavior(StartMediumGameVoid);
+	hardButton.SetButtonBehavior(StartHardGameVoid);
 	backButton.SetButtonBehavior(BackToDefaultVoid);
 
 
@@ -69,7 +79,7 @@ MainMenuScene::~MainMenuScene()
 
 void MainMenuScene::OnEntry(void)
 {
-
+	menuSceneState = MenuSceneState::DEFAULT;
 }
 
 void MainMenuScene::OnExit(void)
@@ -85,8 +95,8 @@ void MainMenuScene::Update(void)
 void MainMenuScene::Draw(void)
 {
 	//Black BackGround
-	GUI::DrawBlackBackground();
-	GUI::DrawTextShaded<FontID::ARIAL>("PD: Frogger", { W.GetWidth() >> 1, int(W.GetHeight()*.1f), 1, 1 }, WHITE, BLACK);
+	GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK);
+	GUI::DrawTextShaded<FontID::ARIAL>("PD: Frogger", { W.GetWidth() / 2, int(W.GetHeight()*.1f), 1, 1 }, WHITE, BLACK);
 
 
 	if(menuSceneState == MenuSceneState::RANKING)

@@ -37,6 +37,13 @@ enum class MenuSceneState : int {
 	RANKING
 };
 
+// Enum ID used to store each true type of main menu state
+enum class Difficulty : int {
+	EASY,
+	MEDIUM,
+	HARD
+};
+
 #define RED {255, 0, 0}
 #define GREEN {0, 255, 0}
 #define BLUE {0, 0, 255}

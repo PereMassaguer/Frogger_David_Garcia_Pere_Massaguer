@@ -18,11 +18,10 @@ Button::~Button()
 void Button::DrawButton()
 {
 	if (IsMoused()) {
-		R.Push(TTF_RenderText_Shaded(R.GetFont<FontID::ARIAL>(), text.c_str(), WHITE, BLACK), transform);
-		//R.Push()
+		R.Push(TTF_RenderText_Shaded(R.GetFont<FontID::ARIAL>(), text.c_str(), BLACK, backgroundColor()), transform);
 	}
 	else {
-		R.Push(TTF_RenderText_Shaded(R.GetFont<FontID::ARIAL>(), text.c_str(), BLACK, backgroundColor()), transform);
+		R.Push(TTF_RenderText_Shaded(R.GetFont<FontID::ARIAL>(), text.c_str(), backgroundColor(), BLACK), transform);
 	}
 		
 }
@@ -39,6 +38,8 @@ void Button::SetButtonBehavior(eventFunction buttonVoid)
 {
 	buttonVoidBehavior = buttonVoid;
 }
+
+
 
 void Button::ExecuteBehavior()
 {

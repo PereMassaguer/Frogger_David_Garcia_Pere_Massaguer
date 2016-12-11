@@ -34,6 +34,9 @@ public:
 		m_curScene->OnEntry();
 	}
 	inline Scene *&GetCurScene(void) { return m_curScene; }
+	inline Difficulty GetCurDifficulty() { return currentDifficulty; }
+	inline void SetCurDifficulty(Difficulty _dif) { currentDifficulty = _dif; }
+
 private:
 	SceneManager() = default;
 	SceneManager(const SceneManager &rhs) = delete;
@@ -45,4 +48,5 @@ private:
 private:
 	std::unordered_map<std::type_index, Scene*> m_scenes;	// Array of screens
 	Scene *m_curScene{ nullptr };							// Pointer to the current scene
+	Difficulty currentDifficulty;
 };

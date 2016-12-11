@@ -12,12 +12,9 @@ class Grid {
 public:
 	Grid(std::string &&fileName, int cellWidth, int cellHeight);
 	~Grid();
-	void CheckMouseSwift(const MouseCoords &mouseBegin, const MouseCoords &mouseEnd);
 	void Update(int &score);
 	void Draw();
 private:
-	bool CheckNeighbours(int i, int j);
-	int KillNeighbours(int i, int j);
 	inline ObjectID &CandyID(int i, int j) const { return cellData[i][j].candy.objectID; }
 	inline Transform &CandyTransform(int i, int j) const { return cellData[i][j].candy.transform; }
 private:

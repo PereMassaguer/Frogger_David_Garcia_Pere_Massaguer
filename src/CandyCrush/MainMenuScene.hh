@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdlib>
 #include "Button.hh"
-#include "GameScene.hh"
 #include "GUI.hh"
 #include "Scene.hh"
 #include "System.hh"
@@ -9,7 +8,6 @@
 class MainMenuScene : public Scene
 {
 	std::vector<Button> buttons[3];
-	
 public:
 
 	explicit MainMenuScene();
@@ -22,4 +20,4 @@ public:
 
 	void setMenuSceneState(MenuSceneState v);
 };
-static MenuSceneState menuSceneState = MenuSceneState::DEFAULT;
+static MenuSceneState menuSceneState;
