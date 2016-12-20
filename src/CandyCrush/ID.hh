@@ -11,6 +11,7 @@
 // Enum ID used to identify each Game Object in the Game
 enum class ObjectID : const int {
 	BGFrogger, 
+	GridDebug,
 	FrogIUp, 
 	Log_1
 };

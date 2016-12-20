@@ -57,8 +57,12 @@ void GameScene::Update(void) {
 	if (!isPaused) {//doBehaviors
 		for (int i = 0; i < spawnables.size(); i++) {			
 			spawnables[i]->Update();
-			if (spawnables[i]->ExitedMap())	spawnables.erase(spawnables.begin() + i);			
+			if (spawnables[i]->ExitedMap())	spawnables.erase(spawnables.begin() + i);
+			else { 
+				std::vector<std::pair<Coord, BehaviorID>> behaviors = spawnables[i]->CoordBehavior(); 
+			}
 		}
+
 	}
 
 	//if (m_grid.GetBehavior(player.GetCoords()) == BehaviorID::RIP) 
@@ -68,6 +72,11 @@ void GameScene::Update(void) {
 
 void GameScene::Draw(void) {
 	m_background.Draw(); // Render background
+
+	//Debug Grid
+	Sprite debugGrid = { { 0, 0, W.GetWidth(), W.GetHeight() }, ObjectID::GridDebug };
+	debugGrid.Draw();
+
 
 	player.Draw();
 	for (auto it : spawnables) it->Draw();
