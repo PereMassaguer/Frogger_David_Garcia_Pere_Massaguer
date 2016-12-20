@@ -14,7 +14,7 @@ public:
 		return timeManager;
 	}
 	void FPSBegin() {
-		m_deltatime = float(SDL_GetTicks() - lastTime);
+		m_deltatime = float(SDL_GetTicks() - lastTime);		
 		lastTime = SDL_GetTicks();
 	}
 	void FPSEnd(std::function<void()> drawFunction) {

@@ -20,15 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cc" />
+    <ClCompile Include="Element.cc" />
     <ClCompile Include="GameScene.cc" />
     <ClCompile Include="Grid.cc" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="MainMenuScene.cc" />
+    <ClCompile Include="Player.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assert.hh" />
     <ClInclude Include="Button.hh" />
     <ClInclude Include="Color.hh" />
+    <ClInclude Include="Element.hh" />
     <ClInclude Include="GameEngine.hh" />
     <ClInclude Include="GameScene.hh" />
     <ClInclude Include="Grid.hh" />
@@ -37,6 +40,7 @@
     <ClInclude Include="Logger.hh" />
     <ClInclude Include="ID.hh" />
     <ClInclude Include="MainMenuScene.hh" />
+    <ClInclude Include="Player.hh" />
     <ClInclude Include="Renderer.hh" />
     <ClInclude Include="Resource.hh" />
     <ClInclude Include="Scene.hh" />

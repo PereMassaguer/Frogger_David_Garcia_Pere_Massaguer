@@ -10,107 +10,55 @@
 #include "IOManager.hh"
 #include "TimeManager.hh"
 
-Grid::Grid(std::string &&filename, int cellWidth, int cellHeight) {
-	/*auto lvlData(IOManager::LoadLevel(std::move(filename), m_rows, m_cols));
-	cellData = new Cell*[m_rows];
-	for (int i = 0; i < m_rows; ++i) cellData[i] = new Cell[m_cols];
+
+
+Grid::Grid() {
+	cellData = new Cell*[GRID_HEIGHT];
+	for (int i = 0; i < GRID_HEIGHT; ++i) cellData[i] = new Cell[GRID_WIDTH];
 	srand(unsigned(time(nullptr)));
-	for (int i = 0; i < m_rows; ++i) {
-		for (int j = 0; j < m_cols; ++j) {
-			cellData[i][j].transform = { j * (cellWidth + 2) + ((W.GetWidth() - cellWidth*m_cols) >> 1),
-										i * (cellHeight + 2) + ((W.GetHeight()- cellHeight*m_rows) >> 1),
-										cellWidth, cellHeight };
-			cellData[i][j].objectID = ObjectID::CELL_EMPTY;
-			CandyTransform(i, j) = cellData[i][j].transform;
-			CandyID(i, j) = lvlData[i][j];
+
+
+	int isHarmful[GRID_HEIGHT][GRID_WIDTH]{
+		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+	};
+
+	for (int i = 0; i < GRID_HEIGHT; ++i) {
+		for (int j = 0; j < GRID_WIDTH; ++j) {
+			if(isHarmful[i][j] == 0) cellData[i][j].behaviorId = BehaviorID::SAFE;
+			else { cellData[i][j].behaviorId = BehaviorID::RIP; }
 		}
 	}
-	gridState = GridState::LINE_CHECKING;*/
 }
 
 Grid::~Grid() {
-	for (int i = 0; i < m_rows; ++i) delete[] cellData[i];
+	for (int i = 0; i < GRID_HEIGHT; ++i) delete[] cellData[i];
 	delete[] cellData;
 }
 
+void Grid::SetBehavior(Transform transform)
+{
+
+}
+
+
+BehaviorID Grid::GetBehavior(Coord pos)
+{
+	return cellData[pos.second][pos.first].behaviorId;
+}
 
 void Grid::Update(int &score) {
-	/*switch (gridState) {
-		case GridState::SWAPPING_CANDIES: {
-			auto fromPos = swapInfo.fromPos, toPos = swapInfo.toPos;
-			auto i0 = swapInfo.fromX, j0 = swapInfo.fromY, in = swapInfo.toX, jn = swapInfo.toY;
-			auto &percent = swapInfo.percent;
-			auto &reSwap = swapInfo.reSwap;
-			// Lerp candies movement
-			CandyTransform(i0, j0).x = Lerp(float(fromPos.x), float(toPos.x), percent);
-			CandyTransform(i0, j0).y = Lerp(float(fromPos.y), float(toPos.y), percent);
-			CandyTransform(in, jn).x = Lerp(float(toPos.x), float(fromPos.x), percent);
-			CandyTransform(in, jn).y = Lerp(float(toPos.y), float(fromPos.y), percent);
-			// Check if swapping finished
-			if (percent > 1.0f) {
-				CandyTransform(i0, j0) = toPos;
-				CandyTransform(in, jn) = fromPos;
-				std::swap(cellData[i0][j0].candy, cellData[in][jn].candy);
-				percent = 0.0f;
-				if (reSwap) { reSwap = false; gridState = GridState::WAITING; return; }
-				if (!CheckNeighbours(in, jn) && !CheckNeighbours(i0, j0)) {
-					std::swap(swapInfo.fromPos, swapInfo.toPos);
-					std::swap(swapInfo.fromX, swapInfo.toX);
-					std::swap(swapInfo.fromY, swapInfo.toY);
-					reSwap = true; return;
-				} else gridState = GridState::LINE_CHECKING;
-			} else percent += TM.GetDeltaTime()*0.01f;
-		} break;
-		case GridState::LINE_CHECKING: { // check each line
-			for (int i = m_rows - 1; i >= 0; --i)
-				for (int j = m_cols - 1; j >= 0; --j)
-					if (CandyID(i, j) != ObjectID::CANDY_EMPTY) { score += KillNeighbours(i, j); }
-			gridState = GridState::SHIFTING_CANDIES;
-			return;
-		} break;
-		case GridState::SHIFTING_CANDIES: {
-			auto y0 = shiftInfo.fromPos, yf = shiftInfo.toPos, i = shiftInfo.i, j = shiftInfo.j;
-			auto &percent = shiftInfo.percent;
-			static bool endShifting = true;
-			if (endShifting) {
-				for (int i = m_rows - 2; i >= 0; --i) {
-					for (int j = 0; j < m_cols; ++j) {
-						if (CandyID(i, j) != ObjectID::CANDY_EMPTY && CandyID(i + 1, j) == ObjectID::CANDY_EMPTY) {
-							shiftInfo.i = i, shiftInfo.j = j;
-							shiftInfo.fromPos = CandyTransform(i, j).y;
-							shiftInfo.toPos = CandyTransform(i + 1, j).y;
-							percent = 0.0f;
-							endShifting = false;
-							return;
-						}
-					}
-				} gridState = GridState::ADDING_CANDIES; return;
-			} else {
-				CandyTransform(i, j).y = Lerp(float(y0), float(yf), percent); // Lerp candies movement down
-				// Check if swapping finished
-				if (percent > 1.0f) {
-					CandyTransform(i, j).y = yf;
-					CandyTransform(i + 1, j).y = y0;
-					std::swap(cellData[i][j].candy, cellData[i + 1][j].candy);
-					if (i + 1 < m_rows)
-						if (CandyID(i + 1, j) == ObjectID::CANDY_EMPTY) {
-							shiftInfo.i = i, shiftInfo.j = j;
-							shiftInfo.fromPos = CandyTransform(i, j).y;
-							shiftInfo.toPos = CandyTransform(i + 1, j).y;
-							return;
-						}
-					endShifting = true; return;
-				} else percent += TM.GetDeltaTime()*0.01f;
-			}
-		} break;
-		case GridState::ADDING_CANDIES: {
-			static bool endAdding;
-			endAdding = true;
-			for (int i = 0; i < m_cols; ++i)
-				if (CandyID(0, i) == ObjectID::CANDY_EMPTY) CandyID(0, i) = ObjectID(rand() % int(ObjectID::CANDY_MAX)), endAdding = false;
-			gridState = (endAdding) ? GridState::WAITING : GridState::LINE_CHECKING;
-		} break;
-	}*/
+	
 }
 
 void Grid::Draw() {/*

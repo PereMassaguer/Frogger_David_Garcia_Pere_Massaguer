@@ -18,6 +18,7 @@ namespace GameEngine {
 	void LoadMedia(void) {
 		R.LoadFont<FontID::ARIAL>("fnt/arial.ttf", 30);
 		R.LoadTexture<ObjectID::BGFrogger>("gfx/BGFrogger.jpg");
+		R.LoadTexture<ObjectID::FrogIUp>("gfx/FrogIdleUP.png");
 	}
 	//! Adds the game scenes into the Scene Manager and decides which is the first screen
 	void AddScenes(void) {

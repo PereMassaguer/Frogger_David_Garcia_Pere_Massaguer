@@ -28,6 +28,8 @@
     <ClCompile Include="Button.cc">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="Element.cc" />
+    <ClCompile Include="Player.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform.hh">
@@ -93,5 +95,7 @@
     <ClInclude Include="Button.hh">
       <Filter>Model</Filter>
     </ClInclude>
+    <ClInclude Include="Element.hh" />
+    <ClInclude Include="Player.hh" />
   </ItemGroup>
 </Project>
