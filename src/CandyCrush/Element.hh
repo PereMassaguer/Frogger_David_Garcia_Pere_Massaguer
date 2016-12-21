@@ -5,11 +5,11 @@
 
 class Element
 {
-	int direction;
 	Sprite sprite;
 	BehaviorID behavior;
 	int size;
 	int spawningRow;
+	int direction;
 	float acumulateX;
 
 public:
@@ -22,5 +22,6 @@ public:
 	void Draw();
 	bool ExitedMap();
 	std::vector<std::pair<Coord, BehaviorID>> CoordBehavior();
+	std::vector<std::pair<Coord, BehaviorID>> CoordBehavior(std::vector<std::pair<Coord, BehaviorID>>& ret);
 };
 

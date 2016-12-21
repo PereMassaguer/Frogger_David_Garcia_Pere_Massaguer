@@ -10,17 +10,19 @@ class Player
 	int elementSize;
 	float displacement;
 
-
 public:
 	Player();
 	~Player();
-	void Calculatetransform();
 
 	void MoveUp();
 	void MoveDown();
 	void MoveLeft();
 	void MoveRight();
-	void CenterToClosestCell();
 	void Draw();
+	Coord GetCoords();
+
+private:
+	void Calculatetransform();
+	void CenterToClosestCell();
 };
 

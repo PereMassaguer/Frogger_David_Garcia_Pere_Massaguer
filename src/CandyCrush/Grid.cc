@@ -17,28 +17,8 @@ Grid::Grid() {
 	for (int i = 0; i < GRID_HEIGHT; ++i) cellData[i] = new Cell[GRID_WIDTH];
 	srand(unsigned(time(nullptr)));
 
-
-	int isHarmful[GRID_HEIGHT][GRID_WIDTH]{
-		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-	};
-
-	for (int i = 0; i < GRID_HEIGHT; ++i) {
-		for (int j = 0; j < GRID_WIDTH; ++j) {
-			if(isHarmful[i][j] == 0) cellData[i][j].behaviorId = BehaviorID::SAFE;
-			else { cellData[i][j].behaviorId = BehaviorID::RIP; }
-		}
-	}
+	timer = TM.GetCurTime();
+	ResetGrid();	
 }
 
 Grid::~Grid() {
@@ -46,22 +26,45 @@ Grid::~Grid() {
 	delete[] cellData;
 }
 
-void Grid::SetBehavior(Transform transform)
-{
 
+
+void Grid::SetBehavior(std::vector<std::pair<Coord, BehaviorID>> &behaviors)
+{
+	for (int i = 0; i < behaviors.size(); i++)
+		cellData[behaviors[i].first.second][behaviors[i].first.first].behaviorId = behaviors[i].second;
 }
 
 
-BehaviorID Grid::GetBehavior(Coord pos)
+void Grid::SetBehavior(Coord &coord, BehaviorID &behavior)
+{
+	cellData[coord.second][coord.first].behaviorId = behavior;
+}
+
+
+BehaviorID Grid::GetBehavior(Coord &pos)
 {
 	return cellData[pos.second][pos.first].behaviorId;
 }
 
-void Grid::Update(int &score) {
-	
+
+void Grid::ResetGrid()
+{
+	for (int i = 0; i < GRID_HEIGHT; ++i) {
+		for (int j = 0; j < GRID_WIDTH; ++j)
+			(i > 5) ? cellData[i][j].behaviorId = BehaviorID::SAFE : cellData[i][j].behaviorId = BehaviorID::RIP;
+	}
 }
 
-void Grid::Draw() {/*
-	for (int i = 0; i < m_rows; ++i) for (int j = 0; j < m_cols; ++j) cellData[i][j].Draw();
-	for (int i = 0; i < m_rows; ++i) for (int j = 0; j < m_cols; ++j) if (CandyID(i, j) != ObjectID::CANDY_EMPTY) cellData[i][j].candy.Draw();
-*/}
+
+void Grid::DebugGrid(int milliseconds) {
+	if (TM.GetCurTime() - timer > milliseconds) {
+		timer = TM.GetCurTime();
+		system("cls");
+
+		for (int i = 0; i < GRID_HEIGHT; ++i) {
+			for (int j = 0; j < GRID_WIDTH; ++j)
+				std::cout << (int)cellData[i][j].behaviorId << " ";
+			std::cout << std::endl;
+		}
+	}
+}

@@ -12,11 +12,6 @@ Player::~Player()
 {
 }
 
-void Player::Calculatetransform()
-{
-	sprite.transform = { (GRID_WIDTH / 2) * CELL_WIDTH + (int)displacement, (GRID_HEIGHT - 1) * CELL_HEIGHT + GRID_Y_DISPLACEMENT, 30, 30 };
-}
-
 void Player::MoveUp()
 {	
 	if (sprite.transform.y >= GRID_Y_DISPLACEMENT + CELL_HEIGHT)
@@ -44,17 +39,31 @@ void Player::MoveRight()
 		sprite.transform.x += CELL_WIDTH;
 }
 
-void Player::CenterToClosestCell()
-{
-	if (sprite.transform.x % CELL_WIDTH > CELL_WIDTH / 2) 
-		sprite.transform.x = ((sprite.transform.x / CELL_WIDTH) + 1) * CELL_WIDTH;
-	else{ sprite.transform.x = (sprite.transform.x / CELL_WIDTH) * CELL_WIDTH; }
-}
-
 
 void Player::Draw()
 {	
 	sprite.Draw();
 }
 
+Coord Player::GetCoords()
+{
+	Coord ret;
+	ret.first = sprite.transform.x / CELL_WIDTH;
+	ret.second = (sprite.transform.y - GRID_Y_DISPLACEMENT) / CELL_HEIGHT;
 
+	if (sprite.transform.x % CELL_WIDTH > CELL_WIDTH / 2) ret.first++;
+
+	return ret;
+}
+
+void Player::Calculatetransform()
+{
+	sprite.transform = { (GRID_WIDTH / 2) * CELL_WIDTH + (int)displacement, (GRID_HEIGHT - 1) * CELL_HEIGHT + GRID_Y_DISPLACEMENT, 30, 30 };
+}
+
+void Player::CenterToClosestCell()
+{
+	if (sprite.transform.x % CELL_WIDTH > CELL_WIDTH / 2)
+		sprite.transform.x = ((sprite.transform.x / CELL_WIDTH) + 1) * CELL_WIDTH;
+	else { sprite.transform.x = (sprite.transform.x / CELL_WIDTH) * CELL_WIDTH; }
+}

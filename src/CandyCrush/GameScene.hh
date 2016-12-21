@@ -20,6 +20,7 @@
 class GameScene : public Scene {
 	Grid m_grid;
 	Sprite m_background;
+	Sprite debugGrid;
 	int m_score{ 0 };
 	int hpLeft;
 	float velocity;
@@ -38,7 +39,7 @@ public:
 	void Draw(void) override;
 
 private:
-	void detectControls();
+	void DetectControls();
 
 };
 static bool isPaused;

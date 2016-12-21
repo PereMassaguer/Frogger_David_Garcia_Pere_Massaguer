@@ -13,7 +13,9 @@ enum class ObjectID : const int {
 	BGFrogger, 
 	GridDebug,
 	FrogIUp, 
-	Log_1
+	Log_1, 
+	Log_2,
+	Log_3
 };
 inline std::ostream &operator<<(std::ostream &os, const ObjectID &id) { return os << int(id); };
 inline std::istream &operator>>(std::istream &is, ObjectID &id) { return is >> reinterpret_cast<int&>(id); };

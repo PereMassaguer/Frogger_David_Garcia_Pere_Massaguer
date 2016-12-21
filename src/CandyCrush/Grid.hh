@@ -20,11 +20,16 @@ class Grid {
 	struct Cell { BehaviorID behaviorId; };
 	Cell **cellData;
 
+	int timer;
 public:
 	Grid();
 	~Grid();
-	void SetBehavior(Transform transform);
-	BehaviorID GetBehavior(Coord pos);
-	void Update(int &score);
-	void Draw();
+
+	void SetBehavior(std::vector<std::pair<Coord, BehaviorID>> &behaviors);
+	void SetBehavior(Coord &coord, BehaviorID &behavior);
+	BehaviorID GetBehavior(Coord &pos);
+	void ResetGrid();
+
+
+	void DebugGrid(int milliseconds);
 };
