@@ -29,7 +29,11 @@ class GameScene : public Scene {
 	Player player;
 	std::vector<Button> pauseButtons;
 	std::vector<Element*> spawnables;
+	Sprite objectiveMark[5];
+	std::pair<Coord, bool> finishPoints[5];
 
+
+	bool nextLevel;
 public:
 	explicit GameScene(void);
 	~GameScene() override;
@@ -40,6 +44,8 @@ public:
 
 private:
 	void DetectControls();
+
+	void CheckObjectives();
 
 };
 static bool isPaused;

@@ -36,6 +36,12 @@ GameScene::GameScene(void) : m_grid(){
 	pauseButtons.push_back(continueButton);
 	pauseButtons.push_back(exitButton);
 
+	finishPoints[0].first = Coord(38, 80);
+	finishPoints[1].first = Coord(122, 80);
+	finishPoints[2].first = Coord(211, 80);
+	finishPoints[3].first = Coord(298, 80);
+	finishPoints[4].first = Coord(382, 80);
+	for (int i = 0; i < 5; i++)	finishPoints[i].second = false;
 }
 
 
@@ -75,7 +81,7 @@ void GameScene::Update(void) {
 			break;
 		case BehaviorID::RIP:
 			hpLeft--;
-			if(hpLeft <= 0) std::cout << "ur det fegg" << std::endl; 
+			//if(hpLeft <= 0) std::cout << "ur det fegg" << std::endl; 
 			//TODO call end over scene
 			break;
 		default:
@@ -98,11 +104,14 @@ void GameScene::Draw(void) {
 	player.Draw();
 	for (auto it : spawnables) it->Draw();
 
+	for()
+
 	if (isPaused) {
 		GUI::DrawRectangle(std::make_pair(W.GetWidth() * 0.75f, W.GetHeight() * 0.75f), BLACK);
 		GUI::DrawTextBlended<FontID::ARIAL>("Game paused", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
 		for (auto it : pauseButtons) it.DrawButton();
 	}
+	std::cout << player.GetCoords().second << std::endl;
 }
 
 
@@ -115,7 +124,10 @@ void GameScene::DetectControls()
 
 
 	if (!isPaused) {
-		if (IM.IsKeyDown<KEY_BUTTON_UP>()) player.MoveUp();
+		if (IM.IsKeyDown<KEY_BUTTON_UP>()) {
+			if (player.GetCoords().second == 0) 
+			player.MoveUp();
+		}
 		if (IM.IsKeyDown<KEY_BUTTON_DOWN>()) player.MoveDown();
 		if (IM.IsKeyDown<KEY_BUTTON_LEFT>()) player.MoveLeft();
 		if (IM.IsKeyDown<KEY_BUTTON_RIGHT>()) player.MoveRight();
@@ -125,4 +137,17 @@ void GameScene::DetectControls()
 			for (auto it : pauseButtons) if (it.IsMoused()) it.ExecuteBehavior();
 		//TODO Arrows menu
 	}
+}
+
+
+void GameScene::CheckObjectives() {
+	int xDifference;
+	for (int i = 0; i < 5; i++) {
+		xDifference = player.GetCoords().first - finishPoints[i].first.first;
+		if (xDifference < 0) xDifference = -xDifference;
+		if (xDifference < CELL_WIDTH) { finishPoints[i].second = true;
+	}
+	int countAccomplished = 0;
+	for (int i = 0; i < 5; i++)	if (finishPoints[i].second) countAccomplished++;
+	if (countAccomplished == 5) nextLevel = true;
 }
