@@ -1,2 +1,0 @@
-ranking ordenat, segons dificultat i guardat en binari
-guardar?

@@ -28,8 +28,18 @@
     <ClCompile Include="Button.cc">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="Element.cc" />
-    <ClCompile Include="Player.cc" />
+    <ClCompile Include="Car.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform.hh">
@@ -95,7 +105,17 @@
     <ClInclude Include="Button.hh">
       <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="Element.hh" />
-    <ClInclude Include="Player.hh" />
+    <ClInclude Include="Car.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

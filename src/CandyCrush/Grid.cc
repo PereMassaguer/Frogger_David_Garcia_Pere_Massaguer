@@ -51,7 +51,7 @@ void Grid::ResetGrid()
 {
 	for (int i = 0; i < GRID_HEIGHT; ++i) {
 		for (int j = 0; j < GRID_WIDTH; ++j)
-			(i > 5) ? cellData[i][j].behaviorId = BehaviorID::SAFE : cellData[i][j].behaviorId = BehaviorID::RIP;
+			(i >= 5) ? cellData[i][j].behaviorId = BehaviorID::SAFE : cellData[i][j].behaviorId = BehaviorID::RIP;
 	}
 }
 

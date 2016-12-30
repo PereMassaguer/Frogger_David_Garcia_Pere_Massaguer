@@ -15,11 +15,16 @@ enum class ObjectID : const int {
 	FrogIUp, 
 	Log_1, 
 	Log_2,
-	Log_3
+	Log_3, 
+	Car_1,
+	Car_2,
+	Car_3,
+	Car_4,
+	Car_Lorry,
+	ObjectiveDone
 };
 inline std::ostream &operator<<(std::ostream &os, const ObjectID &id) { return os << int(id); };
 inline std::istream &operator>>(std::istream &is, ObjectID &id) { return is >> reinterpret_cast<int&>(id); };
-
 
 
 

@@ -23,6 +23,12 @@ namespace GameEngine {
 		R.LoadTexture<ObjectID::Log_1>("gfx/Log_1.png");
 		R.LoadTexture<ObjectID::Log_2>("gfx/Log_2.png");
 		R.LoadTexture<ObjectID::Log_3>("gfx/Log_3.png");
+		R.LoadTexture<ObjectID::Car_1>("gfx/Car_1.png");
+		R.LoadTexture<ObjectID::Car_2>("gfx/Car_2.png");
+		R.LoadTexture<ObjectID::Car_3>("gfx/Car_3.png");
+		R.LoadTexture<ObjectID::Car_4>("gfx/Car_4.png");
+		R.LoadTexture<ObjectID::Car_Lorry>("gfx/Car_Lorry.png");
+		R.LoadTexture<ObjectID::ObjectiveDone>("gfx/ObjectiveDone.png");
 	}
 	//! Adds the game scenes into the Scene Manager and decides which is the first screen
 	void AddScenes(void) {

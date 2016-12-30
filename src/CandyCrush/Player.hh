@@ -1,14 +1,15 @@
 #pragma once
 #include "ID.hh"
 #include "Sprite.hh"
+#include "TimeManager.hh"
 #include "Transform.hh"
 
 
 class Player
 {
 	Sprite sprite;
-	int elementSize;
 	float displacement;
+	float acumulateX;
 
 public:
 	Player();
@@ -19,10 +20,12 @@ public:
 	void MoveLeft();
 	void MoveRight();
 	void Draw();
-	Coord GetCoords();
+	void Update();
+	void Reset();
+	Coord GetGridCoords();
+	Coord GetTransformCoords();
 
 private:
-	void Calculatetransform();
+	void ResetTransform();
 	void CenterToClosestCell();
 };
-

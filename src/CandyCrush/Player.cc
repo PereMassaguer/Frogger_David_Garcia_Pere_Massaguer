@@ -4,8 +4,9 @@
 
 Player::Player()
 {
-	Calculatetransform();
+	ResetTransform();
 	sprite.objectID = ObjectID::FrogIUp;
+	float acumulateX = 0.0f;
 }
 
 Player::~Player()
@@ -45,7 +46,26 @@ void Player::Draw()
 	sprite.Draw();
 }
 
-Coord Player::GetCoords()
+void Player::Update()
+{
+	int row = GetGridCoords().second;
+	if (row < 5) {
+		acumulateX += TM.GetDeltaTime() / 20.0f;
+		if (acumulateX >= 1.0f) {
+			sprite.transform.x += (row % 2 == 0) ? (int)acumulateX : (int)-acumulateX;
+			acumulateX -= (int)acumulateX;
+		}
+	}
+}
+
+void Player::Reset()
+{
+	ResetTransform();
+	sprite.objectID = ObjectID::FrogIUp;
+	float acumulateX = 0.0f;
+}
+
+Coord Player::GetGridCoords()
 {
 	Coord ret;
 	ret.first = sprite.transform.x / CELL_WIDTH;
@@ -56,9 +76,15 @@ Coord Player::GetCoords()
 	return ret;
 }
 
-void Player::Calculatetransform()
+
+Coord Player::GetTransformCoords()
 {
-	sprite.transform = { (GRID_WIDTH / 2) * CELL_WIDTH + (int)displacement, (GRID_HEIGHT - 1) * CELL_HEIGHT + GRID_Y_DISPLACEMENT, 30, 30 };
+	return Coord(sprite.transform.x, sprite.transform.y);
+}
+
+void Player::ResetTransform()
+{
+	sprite.transform = { (GRID_WIDTH / 2) * CELL_WIDTH, (GRID_HEIGHT - 1) * CELL_HEIGHT + GRID_Y_DISPLACEMENT, 30, 30 };
 }
 
 void Player::CenterToClosestCell()

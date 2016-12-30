@@ -6,6 +6,7 @@
 
 #pragma once
 #include "Button.hh"
+#include "Car.hh"
 #include "Grid.hh"
 #include "GUI.hh"
 #include "ID.hh"
@@ -15,6 +16,7 @@
 #include "Player.hh"
 #include "Scene.hh"
 #include "System.hh"
+#include "Log.hh"
 
 // GameScene class with the main gameplay mode
 class GameScene : public Scene {
@@ -28,9 +30,14 @@ class GameScene : public Scene {
 
 	Player player;
 	std::vector<Button> pauseButtons;
-	std::vector<Element*> spawnables;
+	std::vector<Element*> logs;
+	
+	int carAmount;
+	Element *cars;
+
 	Sprite objectiveMark[5];
 	std::pair<Coord, bool> finishPoints[5];
+	Sprite *lifeCounter;
 
 
 	bool nextLevel;
@@ -46,6 +53,10 @@ private:
 	void DetectControls();
 
 	void CheckObjectives();
+
+	void ControlSpawn();
+
+	void DrawHud();
 
 };
 static bool isPaused;
