@@ -32,4 +32,5 @@ public:
 
 
 	void DebugGrid(int milliseconds);
+	void DebugGrid();
 };

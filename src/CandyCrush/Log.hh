@@ -7,6 +7,7 @@ public:
 	Log();
 	Log(int i);
 	~Log();
+
 	bool ExitedMap();
 };
 

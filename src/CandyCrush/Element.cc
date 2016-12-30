@@ -32,10 +32,6 @@ void Element::Draw()
 	sprite.Draw();
 }
 
-bool Element::ExitedMap()
-{
-	return true;
-}
 
 std::vector<std::pair<Coord, BehaviorID>> Element::CoordBehavior() 
 {
@@ -44,6 +40,7 @@ std::vector<std::pair<Coord, BehaviorID>> Element::CoordBehavior()
 	Coord aux;
 	aux.first = sprite.transform.x / CELL_WIDTH;
 	aux.second = (sprite.transform.y - GRID_Y_DISPLACEMENT) / CELL_HEIGHT;
+	if (aux.second >= 5) aux.second++;
 
 	for (int i = 0; i <= size; i++) {
 		if (aux.first < GRID_WIDTH && aux.first >= 0) 

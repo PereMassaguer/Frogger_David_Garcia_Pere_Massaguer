@@ -22,7 +22,6 @@
 class GameScene : public Scene {
 	Grid m_grid;
 	Sprite m_background;
-	Sprite debugGrid;
 	int m_score{ 0 };
 	int hpLeft;
 	float velocity;
@@ -30,6 +29,7 @@ class GameScene : public Scene {
 
 	Player player;
 	std::vector<Button> pauseButtons;
+	std::vector<Button> gameOverButtons;
 	std::vector<Element*> logs;
 	
 	int carAmount;
@@ -41,6 +41,8 @@ class GameScene : public Scene {
 
 
 	bool nextLevel;
+	int levelN;
+	Sprite debugGrid;
 public:
 	explicit GameScene(void);
 	~GameScene() override;
@@ -60,3 +62,4 @@ private:
 
 };
 static bool isPaused;
+static bool gameOver;

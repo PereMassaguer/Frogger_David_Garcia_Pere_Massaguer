@@ -24,7 +24,6 @@ void exitGame() {
 GameScene::GameScene(void) : m_grid(){
 	m_background = { { 0, 0, W.GetWidth(), W.GetHeight() }, ObjectID::BGFrogger };
 	debugGrid = { { 0, 30, W.GetWidth(), W.GetHeight() }, ObjectID::GridDebug };
-	isPaused = false;
 
 	Button continueButton, exitButton;
 	continueButton = Button("CONTINUE", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.4f), 1, 1), WHITE);
@@ -36,6 +35,9 @@ GameScene::GameScene(void) : m_grid(){
 	pauseButtons.push_back(continueButton);
 	pauseButtons.push_back(exitButton);
 
+	gameOverButtons.push_back(exitButton);
+
+
 	finishPoints[0].first = Coord(38, 80);
 	finishPoints[1].first = Coord(122, 80);
 	finishPoints[2].first = Coord(211, 80);
@@ -43,8 +45,8 @@ GameScene::GameScene(void) : m_grid(){
 	finishPoints[4].first = Coord(382, 80);
 	for (auto it : finishPoints) it.second = false;
 
-	carAmount = 10;
-	cars = new Element[carAmount];
+	carAmount = 10 + 2 * levelN;
+	cars = new Car[carAmount];
 	for (int i = 0; i < carAmount; i++) cars[i] = Car(rand() % 5 + 6);
 }
 
@@ -57,10 +59,13 @@ GameScene::~GameScene(void){
 
 void GameScene::OnEntry(void) {
 	IOManager::LevelParameters("cfg/FroggerLevelSettings.xml", SM.GetCurDifficulty(), hpLeft, velocity, velocityMod);
-	
+
+	isPaused = false;
+	gameOver = false;
+	levelN = 0;
 	lifeCounter = new Sprite[hpLeft];
 	for (int i = 0; i < hpLeft; i++) { 
-		lifeCounter[i].transform = Transform(5 + i * CELL_WIDTH / 1.25f, W.GetHeight() - 50, CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
+		lifeCounter[i].transform = Transform(5 + (i % 5) * CELL_WIDTH / 1.25f, W.GetHeight() - ((i < 5) ? 50 : 30), CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
 		lifeCounter[i].objectID = ObjectID::FrogIUp;
 	}
 }
@@ -79,19 +84,19 @@ void GameScene::Update(void) {
 		player.Update();
 
 
-
 		for (int i = 0; i < carAmount; i++) cars[i].Update();
-		for (int i = 0; i < logs.size(); i++) {			
+
+		for (int i = 0; i < logs.size(); i++) {
 			logs[i]->Update();
 			if (logs[i]->ExitedMap())	logs.erase(logs.begin() + i);
-			else { 
+			else {
 				behaviors = logs[i]->CoordBehavior();
-				for (int i = 0; i < behaviors.size(); i++)  m_grid.SetBehavior(behaviors[i].first, behaviors[i].second);
+				for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);
 			}
 		}
 		for (int i = 0; i < carAmount; i++) {
 			behaviors = cars[i].CoordBehavior();
-			for (int i = 0; i < behaviors.size(); i++)  m_grid.SetBehavior(behaviors[i].first, behaviors[i].second);
+			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);
 		}
 		ControlSpawn();
 
@@ -102,18 +107,15 @@ void GameScene::Update(void) {
 		case BehaviorID::RIP:
 			hpLeft--;
 			player.Reset();
-			//if(hpLeft <= 0) std::cout << "ur det fegg" << std::endl; 
-			//TODO call game over scene
 			break;
 		default:
 			std::cout << "Behavior not implemented" << std::endl;
 			break;
 		}
 	}
+	if (hpLeft <= 0) { gameOver = true; }
 
-	
-	m_grid.DebugGrid(500);
-	//if (m_grid.GetBehavior(player.GetCoords()) == BehaviorID::RIP) std::cout << "water detected" << std::endl;
+	m_grid.DebugGrid(10);
 }
 
 
@@ -140,6 +142,11 @@ void GameScene::Draw(void) {
 		GUI::DrawTextBlended<FontID::ARIAL>("Game paused", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
 		for (auto it : pauseButtons) it.DrawButton();
 	}
+	if (gameOver) {
+		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK);
+		GUI::DrawTextBlended<FontID::ARIAL>("Game over", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
+		for (auto it : gameOverButtons) it.DrawButton();
+	}
 }
 
 
@@ -151,7 +158,7 @@ void GameScene::DetectControls()
 	}
 
 
-	if (!isPaused) {
+	if (!isPaused && !gameOver) {
 		if (IM.IsKeyDown<KEY_BUTTON_UP>()) {
 			if (player.GetGridCoords().second == 0) {
 				CheckObjectives();
@@ -163,24 +170,45 @@ void GameScene::DetectControls()
 		if (IM.IsKeyDown<KEY_BUTTON_RIGHT>()) player.MoveRight();
 	}
 	else {
-		if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>())
-			for (auto it : pauseButtons) if (it.IsMoused()) it.ExecuteBehavior();
 		//TODO Arrows menu
+		if (isPaused) {
+			if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>())
+				for (auto it : pauseButtons) if (it.IsMoused()) it.ExecuteBehavior();
+		}
+		else if (gameOver) {
+			if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>())
+				for (auto it : gameOverButtons) if (it.IsMoused()) it.ExecuteBehavior();
+		}
 	}
 }
 
 
 void GameScene::CheckObjectives() {
 	int xDifference;
+	bool validJump = false;
 	for (int i = 0; i < 5; i++) {
 		xDifference = player.GetTransformCoords().first - finishPoints[i].first.first;
 		if (xDifference < 0) xDifference = -xDifference;
 		std::cout << xDifference << std::endl;
-		if (xDifference < CELL_WIDTH) finishPoints[i].second = true;
+		if (xDifference < CELL_WIDTH) {
+			if (!finishPoints[i].second) {
+				finishPoints[i].second = true;
+				validJump = true;
+				break;
+			}
+			else { break; }
+		}			
 	}
-	int countAccomplished = 0;
-	for (int i = 0; i < 5; i++)	if (finishPoints[i].second) countAccomplished++;
-	if (countAccomplished == 5) nextLevel = true;
+	if (validJump) {
+		int countAccomplished = 0;
+		for (int i = 0; i < 5; i++)	if (finishPoints[i].second) countAccomplished++;
+		if (countAccomplished == 5) nextLevel = true;
+		player.Reset();
+	}
+	else {
+		hpLeft--;
+		player.Reset();
+	}
 }
 
 
@@ -201,23 +229,28 @@ void GameScene::ControlSpawn() {
 		}
 	}
 
-
+	system("cls");
+	m_grid.DebugGrid();
 	for (int j = 0; j < carAmount; j++) {
 		if (cars[j].ExitedMap()) {
 			for (int i = 6; i < GRID_HEIGHT - 1; i++) {
 				if (i % 2 == 0) {
-					if (m_grid.GetBehavior(Coord(0, i)) == BehaviorID::SAFE) {
+					if (m_grid.GetBehavior(Coord(GRID_WIDTH - 1, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 2, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 3, i)) == BehaviorID::SAFE) {
 						cars[j] = Car(i);
 						BehaviorID aux = BehaviorID::RIP;
-						m_grid.SetBehavior(Coord(0, i), aux);
+						m_grid.SetBehavior(Coord(GRID_WIDTH - 1, i), aux);
+						system("cls");
+						m_grid.DebugGrid();
 						break;
 					}
 				}
 				else {
-					if (m_grid.GetBehavior(Coord(GRID_WIDTH - 1, i)) == BehaviorID::SAFE) {
+					if (m_grid.GetBehavior(Coord(0, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(1, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(2, i)) == BehaviorID::SAFE) {
 						cars[j] = Car(i);
 						BehaviorID aux = BehaviorID::RIP;
-						m_grid.SetBehavior(Coord(GRID_WIDTH - 1, i), aux);
+						m_grid.SetBehavior(Coord(0, i), aux);
+						system("cls");
+						m_grid.DebugGrid();
 						break;
 					}
 				}

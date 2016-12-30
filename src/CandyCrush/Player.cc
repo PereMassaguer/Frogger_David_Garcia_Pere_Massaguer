@@ -56,6 +56,8 @@ void Player::Update()
 			acumulateX -= (int)acumulateX;
 		}
 	}
+	if (sprite.transform.x < 0)sprite.transform.x = 0;
+	if (sprite.transform.x > W.GetWidth() - CELL_WIDTH) sprite.transform.x = W.GetWidth() - CELL_WIDTH;
 }
 
 void Player::Reset()

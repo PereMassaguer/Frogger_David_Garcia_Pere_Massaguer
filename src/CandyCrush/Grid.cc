@@ -59,12 +59,32 @@ void Grid::ResetGrid()
 void Grid::DebugGrid(int milliseconds) {
 	if (TM.GetCurTime() - timer > milliseconds) {
 		timer = TM.GetCurTime();
-		system("cls");
-
-		for (int i = 0; i < GRID_HEIGHT; ++i) {
-			for (int j = 0; j < GRID_WIDTH; ++j)
-				std::cout << (int)cellData[i][j].behaviorId << " ";
-			std::cout << std::endl;
-		}
+		DebugGrid();
 	}
+}
+
+
+void Grid::DebugGrid() {
+	system("cls");
+	for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < GRID_WIDTH; ++j) {
+			if (cellData[i][j].behaviorId != BehaviorID::SAFE) std::cout << "- ";
+			else { std::cout << (int)cellData[i][j].behaviorId << " "; }
+		}
+		std::cout << std::endl;
+	}
+
+	for (int j = 0; j < GRID_WIDTH; ++j) std::cout << "||";
+	std::cout << std::endl;
+
+	for (int i = 6; i < GRID_HEIGHT - 1; ++i) {
+		for (int j = 0; j < GRID_WIDTH; ++j) {
+			if (cellData[i][j].behaviorId == BehaviorID::SAFE) std::cout << "- ";
+			else { std::cout << (int)cellData[i][j].behaviorId << " "; }
+		}
+		std::cout << std::endl;
+	}
+
+	for (int j = 0; j < GRID_WIDTH; ++j) std::cout << "||";
+	std::cout << std::endl;
 }
