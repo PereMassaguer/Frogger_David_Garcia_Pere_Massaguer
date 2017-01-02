@@ -21,6 +21,7 @@ class Grid {
 	Cell **cellData;
 
 	int timer;
+
 public:
 	Grid();
 	~Grid();

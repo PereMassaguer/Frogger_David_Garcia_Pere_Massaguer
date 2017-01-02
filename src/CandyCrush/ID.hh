@@ -41,15 +41,6 @@ enum class FontID : int {
 	MAX 
 };
 
-// Enum ID used to store each true type font for text rendering
-enum class ButtonID : int {
-	PLAY,
-	EXIT, 
-	EASY, 
-	MEDIUM,
-	HARD
-};
-
 // Enum ID used to store each true type of main menu state
 enum class MenuSceneState : int {
 	DEFAULT,

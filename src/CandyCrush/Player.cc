@@ -24,6 +24,7 @@ void Player::MoveDown()
 {
 	if (sprite.transform.y <= GRID_Y_DISPLACEMENT + (GRID_HEIGHT - 2) * CELL_HEIGHT) {
 		sprite.transform.y += CELL_HEIGHT;
+		sprite.objectID = ObjectID::Car_4;
 		if (sprite.transform.y == GRID_Y_DISPLACEMENT + CELL_HEIGHT * 5) CenterToClosestCell();
 	}
 }

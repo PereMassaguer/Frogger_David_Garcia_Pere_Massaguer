@@ -5,7 +5,7 @@ class Car: public Element
 {
 public:
 	Car();
-	Car(int i);
+	Car(int row);
 	~Car();
 
 	bool ExitedMap();

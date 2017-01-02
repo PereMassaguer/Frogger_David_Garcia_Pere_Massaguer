@@ -43,7 +43,7 @@ GameScene::GameScene(void) : m_grid(){
 	finishPoints[2].first = Coord(211, 80);
 	finishPoints[3].first = Coord(298, 80);
 	finishPoints[4].first = Coord(382, 80);
-	for (auto it : finishPoints) it.second = false;
+	//for (auto it : finishPoints) it.second = false;
 
 	carAmount = 10 + 2 * levelN;
 	cars = new Car[carAmount];
@@ -65,6 +65,7 @@ void GameScene::OnEntry(void) {
 	levelN = 0;
 	m_score = 0;
 	lifeCounter = new Sprite[hpLeft];
+	for (auto it : finishPoints) it.second = false;
 	for (int i = 0; i < hpLeft; i++) { 
 		lifeCounter[i].transform = Transform(5 + (i % 5) * CELL_WIDTH / 1.25f, W.GetHeight() - ((i < 5) ? 50 : 30), CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
 		lifeCounter[i].objectID = ObjectID::FrogIUp;
@@ -73,6 +74,7 @@ void GameScene::OnEntry(void) {
 
 
 void GameScene::OnExit(void) {
+	//for (auto it : finishPoints) it.second = false;
 }
 
 void GameScene::Update(void) {
@@ -190,7 +192,6 @@ void GameScene::CheckObjectives() {
 	for (int i = 0; i < 5; i++) {
 		xDifference = player.GetTransformCoords().first - finishPoints[i].first.first;
 		if (xDifference < 0) xDifference = -xDifference;
-		std::cout << xDifference << std::endl;
 		if (xDifference < CELL_WIDTH) {
 			if (!finishPoints[i].second) {
 				finishPoints[i].second = true;
@@ -256,7 +257,7 @@ void GameScene::ControlSpawn() {
 
 
 void GameScene::DrawHud() {
-	//debugGrid.Draw(); //Debug grid to easily locate grid cells
+	debugGrid.Draw(); //Debug grid to easily locate grid cells
 
 	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(m_score),
 	{ 60, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated

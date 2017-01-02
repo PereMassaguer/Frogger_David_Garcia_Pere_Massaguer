@@ -23,7 +23,6 @@ void Button::DrawButton()
 	else {
 		R.Push(TTF_RenderText_Shaded(R.GetFont<FontID::ARIAL>(), text.c_str(), backgroundColor(), BLACK), transform);
 	}
-		
 }
 
 bool Button::IsMoused() {
@@ -38,7 +37,6 @@ void Button::SetButtonBehavior(eventFunction buttonVoid)
 {
 	buttonVoidBehavior = buttonVoid;
 }
-
 
 
 void Button::ExecuteBehavior()

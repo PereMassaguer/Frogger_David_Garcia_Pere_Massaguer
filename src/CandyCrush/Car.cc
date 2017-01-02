@@ -6,7 +6,7 @@ Car::Car()
 {
 }
 
-Car::Car(int i) : Element(i) {
+Car::Car(int row) : Element(row) {
 	behavior = BehaviorID::RIP;
 	direction = spawningRow % 2 != 0 ? 1 : -1;
 

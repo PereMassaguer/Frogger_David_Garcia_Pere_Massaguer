@@ -6,7 +6,7 @@ Log::Log()
 {
 }
 
-Log::Log(int i) : Element(i)
+Log::Log(int row) : Element(row)
 {
 	behavior = BehaviorID::SAFE;
 	direction = spawningRow % 2 == 0 ? 1 : -1;

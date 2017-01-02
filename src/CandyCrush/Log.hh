@@ -5,7 +5,7 @@ class Log: public Element
 {
 public:
 	Log();
-	Log(int i);
+	Log(int row);
 	~Log();
 
 	bool ExitedMap();

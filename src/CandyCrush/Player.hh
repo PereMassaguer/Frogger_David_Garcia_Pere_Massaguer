@@ -8,7 +8,6 @@
 class Player
 {
 	Sprite sprite;
-	float displacement;
 	float acumulateX;
 
 public:

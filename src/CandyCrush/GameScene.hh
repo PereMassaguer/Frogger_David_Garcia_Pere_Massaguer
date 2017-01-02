@@ -30,10 +30,10 @@ class GameScene : public Scene {
 	Player player;
 	std::vector<Button> pauseButtons;
 	std::vector<Button> gameOverButtons;
-	std::vector<Element*> logs;
-	
+
 	int carAmount;
 	Element *cars;
+	std::vector<Element*> logs; 
 
 	Sprite objectiveMark[5];
 	std::pair<Coord, bool> finishPoints[5];
