@@ -22,7 +22,7 @@
 class GameScene : public Scene {
 	Grid m_grid;
 	Sprite m_background;
-	int m_score{ 0 };
+	int m_score;
 	int hpLeft;
 	float velocity;
 	float velocityMod;

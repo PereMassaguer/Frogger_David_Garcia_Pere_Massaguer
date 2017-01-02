@@ -54,7 +54,9 @@ enum class ButtonID : int {
 enum class MenuSceneState : int {
 	DEFAULT,
 	DIFFICULTY,
-	RANKING
+	CREDITS,
+	RANKING, 
+	COUNT
 };
 
 // Enum ID used to store each true type of main menu state

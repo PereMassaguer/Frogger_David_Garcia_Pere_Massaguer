@@ -27,6 +27,10 @@ void ShowRankingVoid() {
 	menuSceneState = MenuSceneState::RANKING;
 }
 
+void ShowCreditsVoid() {
+	menuSceneState = MenuSceneState::CREDITS;
+}
+
 void ExitGameVoid() {
 	SDL_Quit();
 	exit(0);
@@ -36,20 +40,22 @@ void ExitGameVoid() {
 MainMenuScene::MainMenuScene()
 {
 	//Call button constructor
-	Button playButton, rankingButton, exitButton;
-	playButton = Button("PLAY", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 50, 1, 1), WHITE);
-	rankingButton = Button("RANKING", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 50, 1, 1), WHITE);
-	exitButton = Button("EXIT", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 150, 1, 1), WHITE);
+	Button playButton, rankingButton, creditsButton, exitButton;
+	playButton = Button("PLAY", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 100, 1, 1), WHITE);
+	rankingButton = Button("RANKING", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 25, 1, 1), WHITE);
+	creditsButton = Button("CREDITS", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 50, 1, 1), WHITE);
+	exitButton = Button("EXIT", Transform(W.GetWidth() / 2, W.GetHeight() * 0.85f, 1, 1), WHITE);
 	
 	Button easyButton, mediumButton, hardButton, backButton;
 	easyButton = Button("EASY", Transform(W.GetWidth() / 2 - 150, (W.GetHeight() / 2), 1, 1), GREEN);
 	mediumButton = Button("MEDIUM", Transform(W.GetWidth() / 2, (W.GetHeight() / 2), 1, 1), ORANGE);
 	hardButton = Button("HARD", Transform(W.GetWidth() / 2 + 150, (W.GetHeight() / 2), 1, 1), RED);
-	backButton = Button("BACK", Transform(W.GetWidth() / 2, (W.GetHeight() / 2 + 150), 1, 1), WHITE);
+	backButton = Button("BACK", Transform(W.GetWidth() / 2, W.GetHeight() * 0.85f, 1, 1), WHITE);
 	
 	//Set each button behavior
 	playButton.SetButtonBehavior(SelectDifficultyVoid);
 	rankingButton.SetButtonBehavior(ShowRankingVoid);
+	creditsButton.SetButtonBehavior(ShowCreditsVoid);
 	exitButton.SetButtonBehavior(ExitGameVoid);
 
 	easyButton.SetButtonBehavior(StartEasyGameVoid);
@@ -61,15 +67,17 @@ MainMenuScene::MainMenuScene()
 	//Allocate buttons on a Vectors Array
 	buttons[(int)MenuSceneState::DEFAULT].push_back(playButton);
 	buttons[(int)MenuSceneState::DEFAULT].push_back(rankingButton);
+	buttons[(int)MenuSceneState::DEFAULT].push_back(creditsButton);
 	buttons[(int)MenuSceneState::DEFAULT].push_back(exitButton);
 
 	buttons[(int)MenuSceneState::DIFFICULTY].push_back(easyButton);
 	buttons[(int)MenuSceneState::DIFFICULTY].push_back(mediumButton);
 	buttons[(int)MenuSceneState::DIFFICULTY].push_back(hardButton);
 	buttons[(int)MenuSceneState::DIFFICULTY].push_back(backButton);
-
-
+	
 	buttons[(int)MenuSceneState::RANKING].push_back(backButton);
+
+	buttons[(int)MenuSceneState::CREDITS].push_back(backButton);
 }
 
 
@@ -101,6 +109,14 @@ void MainMenuScene::Draw(void)
 
 	if(menuSceneState == MenuSceneState::RANKING)
 			R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "not implemented yet!", RED), Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
+
+	else if (menuSceneState == MenuSceneState::CREDITS) {
+		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "David Garcia Poyo", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() / 2 - 75, 1, 1));
+		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "Pere Massaguer Vila", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() / 2 - 25, 1, 1));
+	}
+	else if(menuSceneState == MenuSceneState::DIFFICULTY)
+		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "Select difficulty", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() *0.375f, 1, 1));
+
 
 	for (auto it : buttons[(int)menuSceneState]) it.DrawButton();
 }

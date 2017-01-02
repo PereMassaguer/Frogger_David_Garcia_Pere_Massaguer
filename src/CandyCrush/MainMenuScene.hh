@@ -7,7 +7,7 @@
 
 class MainMenuScene : public Scene
 {
-	std::vector<Button> buttons[3];
+	std::vector<Button> buttons[(int)MenuSceneState::COUNT];
 public:
 
 	explicit MainMenuScene();

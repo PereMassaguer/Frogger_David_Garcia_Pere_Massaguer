@@ -27,7 +27,7 @@ GameScene::GameScene(void) : m_grid(){
 
 	Button continueButton, exitButton;
 	continueButton = Button("CONTINUE", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.4f), 1, 1), WHITE);
-	exitButton = Button("EXIT", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.75f), 1, 1), WHITE);
+	exitButton = Button("MENU", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.75f), 1, 1), WHITE);
 
 	continueButton.SetButtonBehavior(continueGame);
 	exitButton.SetButtonBehavior(exitGame);
@@ -63,6 +63,7 @@ void GameScene::OnEntry(void) {
 	isPaused = false;
 	gameOver = false;
 	levelN = 0;
+	m_score = 0;
 	lifeCounter = new Sprite[hpLeft];
 	for (int i = 0; i < hpLeft; i++) { 
 		lifeCounter[i].transform = Transform(5 + (i % 5) * CELL_WIDTH / 1.25f, W.GetHeight() - ((i < 5) ? 50 : 30), CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
@@ -115,7 +116,7 @@ void GameScene::Update(void) {
 	}
 	if (hpLeft <= 0) { gameOver = true; }
 
-	m_grid.DebugGrid(10);
+	m_grid.DebugGrid(50);//See colliders on console (int refresh frequency ms)
 }
 
 
@@ -138,7 +139,7 @@ void GameScene::Draw(void) {
 	}
 
 	if (isPaused) {
-		GUI::DrawRectangle(std::make_pair(W.GetWidth() * 0.75f, W.GetHeight() * 0.75f), BLACK);
+		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight() * 0.8375f), BLACK);
 		GUI::DrawTextBlended<FontID::ARIAL>("Game paused", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
 		for (auto it : pauseButtons) it.DrawButton();
 	}
@@ -229,8 +230,6 @@ void GameScene::ControlSpawn() {
 		}
 	}
 
-	system("cls");
-	m_grid.DebugGrid();
 	for (int j = 0; j < carAmount; j++) {
 		if (cars[j].ExitedMap()) {
 			for (int i = 6; i < GRID_HEIGHT - 1; i++) {
@@ -239,8 +238,6 @@ void GameScene::ControlSpawn() {
 						cars[j] = Car(i);
 						BehaviorID aux = BehaviorID::RIP;
 						m_grid.SetBehavior(Coord(GRID_WIDTH - 1, i), aux);
-						system("cls");
-						m_grid.DebugGrid();
 						break;
 					}
 				}
@@ -249,8 +246,6 @@ void GameScene::ControlSpawn() {
 						cars[j] = Car(i);
 						BehaviorID aux = BehaviorID::RIP;
 						m_grid.SetBehavior(Coord(0, i), aux);
-						system("cls");
-						m_grid.DebugGrid();
 						break;
 					}
 				}
@@ -261,11 +256,13 @@ void GameScene::ControlSpawn() {
 
 
 void GameScene::DrawHud() {
-	//debugGrid.Draw(); //Debug Grid
-
+	//debugGrid.Draw(); //Debug grid to easily locate grid cells
 
 	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(m_score),
 	{ 60, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated
-	
+
+	GUI::DrawTextBlended<FontID::ARIAL>("Level " + std::to_string(levelN + 1),
+	{W.GetWidth() - 75, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render levelId
+
 	for (int i = 0; i < hpLeft; i++) lifeCounter[i].Draw();
 }
