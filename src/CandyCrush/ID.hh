@@ -12,7 +12,10 @@
 enum class ObjectID : const int {
 	BGFrogger, 
 	GridDebug,
-	FrogIUp, 
+	FrogIUp,
+	FrogIDown,
+	FrogILeft,
+	FragIRight,
 	Log_1, 
 	Log_2,
 	Log_3, 

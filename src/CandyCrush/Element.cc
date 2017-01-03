@@ -20,8 +20,7 @@ Element::~Element()
 
 void Element::Update()
 {
-	//sprite.transform.x += TM.GetDeltaTime() / 10;
-
+	
 	acumulateX += TM.GetDeltaTime() / 20.0f;
 	if (acumulateX >= 1.0f) {
 		sprite.transform.x += direction * (int)acumulateX;

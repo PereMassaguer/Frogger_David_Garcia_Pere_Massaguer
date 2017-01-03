@@ -20,6 +20,9 @@ namespace GameEngine {
 		R.LoadTexture<ObjectID::BGFrogger>("gfx/BGFrogger.jpg");
 		R.LoadTexture<ObjectID::GridDebug>("gfx/GridDebug.png");
 		R.LoadTexture<ObjectID::FrogIUp>("gfx/FrogIdleUP.png");
+		R.LoadTexture<ObjectID::FragIRight>("gfx/FrogIdleRight.png");
+		R.LoadTexture<ObjectID::FrogIDown>("gfx/FrogIdleDown.png");
+		R.LoadTexture<ObjectID::FrogILeft>("gfx/FrogIdleLeft.png");
 		R.LoadTexture<ObjectID::Log_1>("gfx/Log_1.png");
 		R.LoadTexture<ObjectID::Log_2>("gfx/Log_2.png");
 		R.LoadTexture<ObjectID::Log_3>("gfx/Log_3.png");

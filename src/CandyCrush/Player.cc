@@ -17,6 +17,7 @@ void Player::MoveUp()
 {	
 	if (sprite.transform.y >= GRID_Y_DISPLACEMENT + CELL_HEIGHT)
 		sprite.transform.y -= CELL_HEIGHT;
+		sprite.objectID = ObjectID::FrogIUp;
 	//setspriteID
 }
 
@@ -24,7 +25,7 @@ void Player::MoveDown()
 {
 	if (sprite.transform.y <= GRID_Y_DISPLACEMENT + (GRID_HEIGHT - 2) * CELL_HEIGHT) {
 		sprite.transform.y += CELL_HEIGHT;
-		sprite.objectID = ObjectID::Car_4;
+		sprite.objectID = ObjectID::FrogIDown;
 		if (sprite.transform.y == GRID_Y_DISPLACEMENT + CELL_HEIGHT * 5) CenterToClosestCell();
 	}
 }
@@ -33,12 +34,14 @@ void Player::MoveLeft()
 {
 	if (sprite.transform.x >= CELL_WIDTH)
 		sprite.transform.x -= CELL_WIDTH;
+		sprite.objectID = ObjectID::FrogILeft;
 }
 
 void Player::MoveRight()
 {
 	if (sprite.transform.x <= (GRID_WIDTH - 2) * CELL_WIDTH)
 		sprite.transform.x += CELL_WIDTH;
+		sprite.objectID = ObjectID::FragIRight;
 }
 
 
