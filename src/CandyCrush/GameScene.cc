@@ -18,6 +18,7 @@ void continueGame() {
 void exitGame() {
 	isPaused = true;
 	SM.SetCurScene<MainMenuScene>();
+	for (auto it : finishPoints) it.second = false;
 }
 
 
@@ -58,6 +59,7 @@ GameScene::~GameScene(void){
 
 
 void GameScene::OnEntry(void) {
+	
 	IOManager::LevelParameters("cfg/FroggerLevelSettings.xml", SM.GetCurDifficulty(), hpLeft, velocity, velocityMod);
 
 	isPaused = false;
