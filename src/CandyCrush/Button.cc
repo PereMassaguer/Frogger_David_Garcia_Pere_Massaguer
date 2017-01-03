@@ -13,6 +13,7 @@ Button::Button(std::string && _text, Transform && _transform, Color && _backgrou
 
 Button::~Button()
 {
+
 }
 
 void Button::DrawButton()
