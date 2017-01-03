@@ -6,6 +6,15 @@
 
 #include "GameScene.hh"
 #include "MainMenuScene.hh"
+#include <SDL_mixer.h>
+
+// Our wave file
+Mix_Chunk *wave = NULL;
+void repeat(int a) {
+	if (Mix_PlayChannel(a, wave, 0) == -1)
+		exit(4);
+	//Mix_ChannelFinished(&repeat);
+}
 
 using namespace Logger;
 
@@ -18,6 +27,10 @@ void continueGame() {
 void exitGame() {
 	isPaused = true;
 	SM.SetCurScene<MainMenuScene>();
+	// clean up our resources
+	Mix_FreeChunk(wave);
+	// quit SDL_mixer
+	Mix_CloseAudio();
 }
 
 
@@ -58,7 +71,17 @@ GameScene::~GameScene(void){
 
 
 void GameScene::OnEntry(void) {
-	
+	//Music
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+		exit(2);
+	std::string music = "sfx/Frogger_music_wav.wav";
+
+	wave = Mix_LoadWAV(RESOURCE_FILE(music));
+	if (wave == NULL)
+		exit(3);
+	if (Mix_PlayChannel(-1, wave, 0) == -1)
+		exit(4);
+	Mix_ChannelFinished(&repeat);
 	IOManager::LevelParameters("cfg/FroggerLevelSettings.xml", SM.GetCurDifficulty(), hpLeft, velocity, velocityMod);
 
 	isPaused = false;
@@ -118,7 +141,6 @@ void GameScene::Update(void) {
 		}
 	}
 	if (hpLeft <= 0) { gameOver = true; }
-
 	m_grid.DebugGrid(50);//See colliders on console (int refresh frequency ms)
 }
 
