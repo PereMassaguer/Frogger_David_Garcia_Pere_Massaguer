@@ -11,6 +11,10 @@
 #include "GameScene.hh"
 #include "MainMenuScene.hh"
 #pragma endregion TODO
+//Music
+//#include<sdl.h>
+//#include<stdio.h>
+//#include<SDL_mixer.h>
 
 //! Initializes game needs and controls the game loop
 namespace GameEngine {
@@ -33,6 +37,8 @@ namespace GameEngine {
 		R.LoadTexture<ObjectID::Car_Lorry>("gfx/Car_Lorry.png");
 		R.LoadTexture<ObjectID::ObjectiveDone>("gfx/ObjectiveDone.png");
 	}
+
+
 	//! Adds the game scenes into the Scene Manager and decides which is the first screen
 	void AddScenes(void) {
 		SM.AddScene<MainMenuScene>();
