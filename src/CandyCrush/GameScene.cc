@@ -89,7 +89,7 @@ void GameScene::OnEntry(void) {
 	levelN = 0;
 	m_score = 0;
 	lifeCounter = new Sprite[hpLeft];
-	for (auto it : finishPoints) it.second = false;
+	for (auto &it : finishPoints) it.second = false;
 	for (int i = 0; i < hpLeft; i++) { 
 		lifeCounter[i].transform = Transform(5 + (i % 5) * CELL_WIDTH / 1.25f, W.GetHeight() - ((i < 5) ? 50 : 30), CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
 		lifeCounter[i].objectID = ObjectID::FrogIUp;
@@ -98,7 +98,6 @@ void GameScene::OnEntry(void) {
 
 
 void GameScene::OnExit(void) {
-	//for (auto it : finishPoints) it.second = false;
 }
 
 void GameScene::Update(void) {
@@ -185,12 +184,7 @@ void GameScene::DetectControls()
 
 
 	if (!isPaused && !gameOver) {
-		if (IM.IsKeyDown<KEY_BUTTON_UP>()) {
-			if (player.GetGridCoords().second == 0) {
-				CheckObjectives();
-			}				
-			player.MoveUp();
-		}
+		if (IM.IsKeyDown<KEY_BUTTON_UP>()) player.GetGridCoords().second == 0 ? CheckObjectives() : player.MoveUp();
 		if (IM.IsKeyDown<KEY_BUTTON_DOWN>()) player.MoveDown();
 		if (IM.IsKeyDown<KEY_BUTTON_LEFT>()) player.MoveLeft();
 		if (IM.IsKeyDown<KEY_BUTTON_RIGHT>()) player.MoveRight();
