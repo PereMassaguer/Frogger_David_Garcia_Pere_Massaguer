@@ -18,7 +18,6 @@ void continueGame() {
 void exitGame() {
 	isPaused = true;
 	SM.SetCurScene<MainMenuScene>();
-	for (auto it : finishPoints) it.second = false;
 }
 
 
