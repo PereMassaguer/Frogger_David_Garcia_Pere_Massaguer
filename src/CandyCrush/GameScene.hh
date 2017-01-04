@@ -5,6 +5,8 @@
 ******************************************************************/
 
 #pragma once
+#include <SDL_mixer.h>
+
 #include "Button.hh"
 #include "Car.hh"
 #include "Grid.hh"
@@ -42,6 +44,9 @@ class GameScene : public Scene {
 
 
 	int levelN;
+	int startingTime;
+	float timeLeft;
+	int maxYCoord;
 	Sprite debugGrid;
 public:
 	explicit GameScene(void);

@@ -6,7 +6,8 @@
 
 #include "GameScene.hh"
 #include "MainMenuScene.hh"
-#include <SDL_mixer.h>
+
+using namespace Logger;
 
 // Our wave file
 Mix_Chunk *wave = NULL;
@@ -15,8 +16,6 @@ void repeat(int a) {
 		exit(4);
 	//Mix_ChannelFinished(&repeat);
 }
-
-using namespace Logger;
 
 
 void continueGame() {
@@ -93,6 +92,10 @@ void GameScene::OnEntry(void) {
 	carAmount = 10 + 2 * levelN;
 	cars = new Car[carAmount];
 	for (int i = 0; i < carAmount; i++) cars[i] = Car(rand() % 5 + 6);
+	insect.Reset();
+	maxYCoord = 0;
+	startingTime = 120 / velocityMod;
+	timeLeft = startingTime;
 }
 
 
@@ -107,6 +110,7 @@ void GameScene::Update(void) {
 	DetectControls();
 
 	if (gameState == GameSceneState::PLAYING) {
+		timeLeft < 0.0f ? gameState = GameSceneState::GAMEOVER : timeLeft -= TM.GetDeltaTime()/1000;
 		std::vector<std::pair<Coord, BehaviorID>> behaviors;
 		m_grid.ResetGrid();
 		player.Update();
@@ -134,10 +138,11 @@ void GameScene::Update(void) {
 		case BehaviorID::RIP:
 			hpLeft--;
 			player.Reset();
+			maxYCoord = 0;
 			break;
 		}
 		if (hpLeft <= 0) { gameState = GameSceneState::GAMEOVER; }
-		m_grid.DebugGrid(50);//See colliders on console (int refresh frequency ms)
+		m_grid.DebugGrid(10);//See colliders on console (int refresh frequency ms)
 	}
 	if (gameState == GameSceneState::PAUSED) {
 	
@@ -205,13 +210,13 @@ void GameScene::Draw(void) {
 	case GameSceneState::PAUSED:
 		m_background.Draw(); //Render background
 		DrawHud();
-		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight() * 0.8375f), BLACK);
+		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight() * 0.8375f), BLACK, Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
 		GUI::DrawTextBlended<FontID::ARIAL>("Game paused", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.15f), 1, 1), WHITE);
 		for (auto it : pauseButtons) it.DrawButton();
 		break;
 
 	case GameSceneState::GAMEOVER:
-		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK);
+		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK, Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
 		GUI::DrawTextBlended<FontID::ARIAL>("Game over", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.15f), 1, 1), WHITE);
 		for (auto it : gameOverButtons) it.DrawButton();
 		//if (playerName.length() > 2) GUI::DrawTextBlended<FontID::ARIAL>("Press enter to save score", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
@@ -231,7 +236,15 @@ void GameScene::DetectControls()
 		case GameSceneState::PLAYING:
 			if (IM.IsKeyDown<SDLK_ESCAPE>() || IM.IsKeyDown<'p'>()) gameState = GameSceneState::PAUSED;
 			if (gameState == GameSceneState::PLAYING) {
-				if (IM.IsKeyDown<KEY_BUTTON_UP>()) player.GetGridCoords().second == 0 ? CheckObjectives() : player.MoveUp();
+				if (IM.IsKeyDown<KEY_BUTTON_UP>())
+					if (player.GetGridCoords().second == 0) CheckObjectives();
+					else {
+						player.MoveUp();
+						if (player.GetGridCoords().second < GRID_HEIGHT - maxYCoord - 1) {
+							maxYCoord++;
+							m_score += 10;
+						}
+					}	 
 				if (IM.IsKeyDown<KEY_BUTTON_DOWN>()) player.MoveDown();
 				if (IM.IsKeyDown<KEY_BUTTON_LEFT>()) player.MoveLeft();
 				if (IM.IsKeyDown<KEY_BUTTON_RIGHT>()) player.MoveRight();
@@ -260,7 +273,10 @@ void GameScene::CheckObjectives() {
 			if (!finishPoints[i].second) {
 				finishPoints[i].second = true;
 				validJump = true;
-				insect.CheckGrabbed(i);
+				if (insect.CheckGrabbed(i)) {
+					m_score += 200;
+					insect.Reset();
+				}
 				break;
 			}
 			else { break; }
@@ -271,10 +287,13 @@ void GameScene::CheckObjectives() {
 		for (int i = 0; i < 5; i++)	if (finishPoints[i].second) countAccomplished++;
 		if (countAccomplished == 5) NextLevel();
 		player.Reset();
+		maxYCoord = 0;
+		m_score += 50 + 10 * timeLeft;
 	}
 	else {
 		hpLeft--;
 		player.Reset();
+		maxYCoord = 0;
 	}
 }
 
@@ -323,17 +342,23 @@ void GameScene::ControlSpawn() {
 
 void GameScene::DrawHud() {
 	//debugGrid.Draw(); //Debug grid to easily locate grid cells
-
-	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(m_score),
-	{ 60, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated
+	std::string text = "Score: " + std::to_string(m_score);
+	std::pair<int, int> textSize;
+	TTF_SizeText(R.GetFont<FontID::ARIAL>(), text.c_str(), &textSize.first, &textSize.second);
+	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(m_score), { 15 + textSize.first / 2, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated
 
 	GUI::DrawTextBlended<FontID::ARIAL>("Level " + std::to_string(levelN + 1),
 	{W.GetWidth() - 75, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render levelId
 
 	for (int i = 0; i < hpLeft; i++) lifeCounter[i].Draw();
+
+	GUI::DrawTextBlended<FontID::ARIAL>(std::to_string((int)timeLeft),
+	{ int(W.GetWidth() * 0.85f), int(W.GetHeight() * .95f), 1, 1 }, {(int)(255 * (1 - timeLeft / startingTime)), (int)(127 * (timeLeft / startingTime)), 0});
 }
 
 
 void GameScene::NextLevel() {
-
+	levelN++;
+	m_score += 1000;
+	for (auto &it : finishPoints) it.second = false;
 }

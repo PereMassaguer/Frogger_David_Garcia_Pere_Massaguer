@@ -103,10 +103,10 @@ void MainMenuScene::Update(void)
 void MainMenuScene::Draw(void)
 {
 	//Black BackGround
-	GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK);
+	GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK, Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
 	GUI::DrawTextShaded<FontID::ARIAL>("PD: Frogger", { W.GetWidth() / 2, int(W.GetHeight()*.1f), 1, 1 }, WHITE, BLACK);
 
-
+	
 	if(menuSceneState == MenuSceneState::RANKING)
 			R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "not implemented yet!", RED), Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
 
@@ -116,7 +116,6 @@ void MainMenuScene::Draw(void)
 	}
 	else if(menuSceneState == MenuSceneState::DIFFICULTY)
 		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "Select difficulty", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() *0.375f, 1, 1));
-
 
 	for (auto it : buttons[(int)menuSceneState]) it.DrawButton();
 }

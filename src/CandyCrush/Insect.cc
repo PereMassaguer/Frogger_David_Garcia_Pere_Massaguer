@@ -33,14 +33,14 @@ void Insect::Update()
 				}
 			}
 		}
-		sprite.transform.x = CELL_WIDTH * (1 + 2 * objectiveId);
+		sprite.transform.x = CELL_WIDTH * (1 + 2.5f * objectiveId);
 	}
 }
 
 bool Insect::CheckGrabbed(int objectiveCounter)
 {
-	objectivesArrived[objectiveCounter - 1] = true;
-	return (objectiveCounter - 1) == objectiveId && isShown;
+	objectivesArrived[objectiveCounter] = true;
+	return (objectiveCounter) == objectiveId && isShown;
 }
 
 void Insect::Draw()
