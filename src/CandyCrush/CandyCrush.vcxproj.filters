@@ -40,6 +40,9 @@
     <ClCompile Include="Player.cc">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="Insect.cc">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform.hh">
@@ -115,6 +118,9 @@
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Player.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Insect.hh">
       <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>

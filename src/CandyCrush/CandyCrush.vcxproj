@@ -24,6 +24,7 @@
     <ClCompile Include="Element.cc" />
     <ClCompile Include="GameScene.cc" />
     <ClCompile Include="Grid.cc" />
+    <ClCompile Include="Insect.cc" />
     <ClCompile Include="Log.cc" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="MainMenuScene.cc" />
@@ -39,6 +40,7 @@
     <ClInclude Include="GameScene.hh" />
     <ClInclude Include="Grid.hh" />
     <ClInclude Include="InputManager.hh" />
+    <ClInclude Include="Insect.hh" />
     <ClInclude Include="IOManager.hh" />
     <ClInclude Include="Log.hh" />
     <ClInclude Include="Logger.hh" />

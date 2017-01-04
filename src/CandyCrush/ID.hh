@@ -53,6 +53,16 @@ enum class MenuSceneState : int {
 	COUNT
 };
 
+
+// Enum ID used to store each true type of game state
+enum GameSceneState : int {
+	NAME,
+	PLAYING,
+	PAUSED,
+	GAMEOVER,
+	COUNT
+};
+
 // Enum ID used to store each true type of main menu state
 enum class Difficulty : int {
 	EASY,

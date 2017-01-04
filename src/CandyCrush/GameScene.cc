@@ -20,12 +20,12 @@ using namespace Logger;
 
 
 void continueGame() {
-	isPaused = false;
+	gameState = GameSceneState::PLAYING; 
+	TM.FPSBegin();
 }
 
 
 void exitGame() {
-	isPaused = true;
 	SM.SetCurScene<MainMenuScene>();
 	// clean up our resources
 	Mix_FreeChunk(wave);
@@ -51,16 +51,16 @@ GameScene::GameScene(void) : m_grid(){
 	gameOverButtons.push_back(exitButton);
 
 
-	finishPoints[0].first = Coord(38, 80);
-	finishPoints[1].first = Coord(122, 80);
-	finishPoints[2].first = Coord(211, 80);
-	finishPoints[3].first = Coord(298, 80);
-	finishPoints[4].first = Coord(382, 80);
-	//for (auto it : finishPoints) it.second = false;
+	finishPoints[0].first.transform = { 38 - CELL_WIDTH / 2, 80 - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
+	finishPoints[1].first.transform = { 122 - CELL_WIDTH / 2, 80 - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
+	finishPoints[2].first.transform = { 211 - CELL_WIDTH / 2, 80 - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
+	finishPoints[3].first.transform = { 298 - CELL_WIDTH / 2, 80 - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
+	finishPoints[4].first.transform = { 382 - CELL_WIDTH / 2, 80 - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
+	for (auto &it : finishPoints) {
+		it.second = false;
+		it.first.objectID = ObjectID::ObjectiveDone;
+	}
 
-	carAmount = 10 + 2 * levelN;
-	cars = new Car[carAmount];
-	for (int i = 0; i < carAmount; i++) cars[i] = Car(rand() % 5 + 6);
 }
 
 
@@ -72,20 +72,16 @@ GameScene::~GameScene(void){
 
 void GameScene::OnEntry(void) {
 	//Music
-	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
-		exit(2);
 	std::string music = "sfx/Frogger_music_wav.wav";
-
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) exit(2);
 	wave = Mix_LoadWAV(RESOURCE_FILE(music));
-	if (wave == NULL)
-		exit(3);
-	if (Mix_PlayChannel(-1, wave, 0) == -1)
-		exit(4);
+	if (wave == NULL) exit(3);
+	if (Mix_PlayChannel(-1, wave, 0) == -1)	exit(4);
 	Mix_ChannelFinished(&repeat);
+
 	IOManager::LevelParameters("cfg/FroggerLevelSettings.xml", SM.GetCurDifficulty(), hpLeft, velocity, velocityMod);
 
-	isPaused = false;
-	gameOver = false;
+	gameState = GameSceneState::PLAYING;
 	levelN = 0;
 	m_score = 0;
 	lifeCounter = new Sprite[hpLeft];
@@ -94,27 +90,32 @@ void GameScene::OnEntry(void) {
 		lifeCounter[i].transform = Transform(5 + (i % 5) * CELL_WIDTH / 1.25f, W.GetHeight() - ((i < 5) ? 50 : 30), CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
 		lifeCounter[i].objectID = ObjectID::FrogIUp;
 	}
+	carAmount = 10 + 2 * levelN;
+	cars = new Car[carAmount];
+	for (int i = 0; i < carAmount; i++) cars[i] = Car(rand() % 5 + 6);
 }
 
 
 void GameScene::OnExit(void) {
+	delete[] cars;
+	delete[] lifeCounter;
 }
 
 void GameScene::Update(void) {
 	srand(TM.GetCurTime());
+
 	DetectControls();
 
-	if (!isPaused) {
+	if (gameState == GameSceneState::PLAYING) {
 		std::vector<std::pair<Coord, BehaviorID>> behaviors;
 		m_grid.ResetGrid();
 		player.Update();
-
 
 		for (int i = 0; i < carAmount; i++) cars[i].Update();
 
 		for (int i = 0; i < logs.size(); i++) {
 			logs[i]->Update();
-			if (logs[i]->ExitedMap())	logs.erase(logs.begin() + i);
+			if (logs[i]->ExitedMap()) logs.erase(logs.begin() + i);
 			else {
 				behaviors = logs[i]->CoordBehavior();
 				for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);
@@ -125,80 +126,126 @@ void GameScene::Update(void) {
 			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);
 		}
 		ControlSpawn();
+		insect.Update();
 
 		switch (m_grid.GetBehavior(Coord(player.GetGridCoords()))) {
 		case BehaviorID::SAFE:
-
 			break;
 		case BehaviorID::RIP:
 			hpLeft--;
 			player.Reset();
 			break;
-		default:
-			std::cout << "Behavior not implemented" << std::endl;
-			break;
 		}
+		if (hpLeft <= 0) { gameState = GameSceneState::GAMEOVER; }
+		m_grid.DebugGrid(50);//See colliders on console (int refresh frequency ms)
 	}
-	if (hpLeft <= 0) { gameOver = true; }
-	m_grid.DebugGrid(50);//See colliders on console (int refresh frequency ms)
+	if (gameState == GameSceneState::PAUSED) {
+	
+	}
+	if (gameState == GameSceneState::GAMEOVER) {
+		if (playerName.length() < 8) {
+			//Deteccion entrada nombre, no conseguimos hacrlo con 2 for, la intencion era recorrer (SDLK_0..SDLK_9),(a..z)
+			if (IM.IsKeyDown<SDLK_0>()) playerName += "0";
+			else if (IM.IsKeyDown<SDLK_1>()) playerName += "1";
+			else if (IM.IsKeyDown<SDLK_2>()) playerName += "2";
+			else if (IM.IsKeyDown<SDLK_3>()) playerName += "3";
+			else if (IM.IsKeyDown<SDLK_4>()) playerName += "4";
+			else if (IM.IsKeyDown<SDLK_5>()) playerName += "5";
+			else if (IM.IsKeyDown<SDLK_6>()) playerName += "6";
+			else if (IM.IsKeyDown<SDLK_7>()) playerName += "7";
+			else if (IM.IsKeyDown<SDLK_8>()) playerName += "8";
+			else if (IM.IsKeyDown<SDLK_9>()) playerName += "9";
+			else if (IM.IsKeyDown<'a'>()) playerName += "A";
+			else if (IM.IsKeyDown<'b'>()) playerName += "B";
+			else if (IM.IsKeyDown<'c'>()) playerName += "C";
+			else if (IM.IsKeyDown<'d'>()) playerName += "D";
+			else if (IM.IsKeyDown<'e'>()) playerName += "E";
+			else if (IM.IsKeyDown<'f'>()) playerName += "F";
+			else if (IM.IsKeyDown<'g'>()) playerName += "G";
+			else if (IM.IsKeyDown<'h'>()) playerName += "H";
+			else if (IM.IsKeyDown<'i'>()) playerName += "I";
+			else if (IM.IsKeyDown<'j'>()) playerName += "J";
+			else if (IM.IsKeyDown<'k'>()) playerName += "K";
+			else if (IM.IsKeyDown<'l'>()) playerName += "L";
+			else if (IM.IsKeyDown<'m'>()) playerName += "M";
+			else if (IM.IsKeyDown<'n'>()) playerName += "N";
+			else if (IM.IsKeyDown<'o'>()) playerName += "O";
+			else if (IM.IsKeyDown<'p'>()) playerName += "P";
+			else if (IM.IsKeyDown<'q'>()) playerName += "Q";
+			else if (IM.IsKeyDown<'r'>()) playerName += "R";
+			else if (IM.IsKeyDown<'s'>()) playerName += "S";
+			else if (IM.IsKeyDown<'t'>()) playerName += "T";
+			else if (IM.IsKeyDown<'u'>()) playerName += "U";
+			else if (IM.IsKeyDown<'v'>()) playerName += "V";
+			else if (IM.IsKeyDown<'w'>()) playerName += "W";
+			else if (IM.IsKeyDown<'x'>()) playerName += "X";
+			else if (IM.IsKeyDown<'y'>()) playerName += "Y";
+			else if (IM.IsKeyDown<'z'>()) playerName += "Z";
+		}
+		//erase last character
+		if (IM.IsKeyDown<SDLK_BACKSPACE>() && playerName.length() > 0) playerName = playerName.substr(0, playerName.length() - 1);
+		if (IM.IsKeyDown<SDLK_RETURN>() && playerName.length() > 2) gameState = GameSceneState::PLAYING;
+	}
 }
 
 
 void GameScene::Draw(void) {
 
-	m_background.Draw(); //Render background
-	for (auto it : logs) it->Draw();
-	for (int i = 0; i < carAmount; i++) cars[i].Draw();
-	DrawHud();
+	switch (gameState) {
+	case GameSceneState::PLAYING:
+		m_background.Draw(); //Render background
+		for (auto it : logs) it->Draw();
+		for (int i = 0; i < carAmount; i++) cars[i].Draw();
+		DrawHud();
+		player.Draw();
+		for (auto it : finishPoints)  if (it.second) it.first.Draw();
+		insect.Draw();
+		break;
 
-	player.Draw();
-
-	for (auto it : finishPoints) {
-		if (it.second) {
-			Sprite temp;
-			temp.transform = { it.first.first - CELL_WIDTH / 2, it.first.second - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
-			temp.objectID = ObjectID::ObjectiveDone;
-			temp.Draw();
-		}
-	}
-
-	if (isPaused) {
+	case GameSceneState::PAUSED:
+		m_background.Draw(); //Render background
+		DrawHud();
 		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight() * 0.8375f), BLACK);
-		GUI::DrawTextBlended<FontID::ARIAL>("Game paused", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
+		GUI::DrawTextBlended<FontID::ARIAL>("Game paused", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.15f), 1, 1), WHITE);
 		for (auto it : pauseButtons) it.DrawButton();
-	}
-	if (gameOver) {
+		break;
+
+	case GameSceneState::GAMEOVER:
 		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK);
-		GUI::DrawTextBlended<FontID::ARIAL>("Game over", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
+		GUI::DrawTextBlended<FontID::ARIAL>("Game over", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.15f), 1, 1), WHITE);
 		for (auto it : gameOverButtons) it.DrawButton();
+		//if (playerName.length() > 2) GUI::DrawTextBlended<FontID::ARIAL>("Press enter to save score", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
+
+		std::string tempName = playerName;
+		for (int i = playerName.length(); i < 8; i++) tempName += " _";
+		GUI::DrawTextBlended<FontID::ARIAL>("Enter your name(3-8 char)", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.45f), 1, 1), WHITE);
+		GUI::DrawTextBlended<FontID::ARIAL>(tempName.c_str(), Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.525f), 1, 1), WHITE);
+		break;
 	}
 }
 
 
 void GameScene::DetectControls()
 {
-	if (IM.IsKeyDown<SDLK_ESCAPE>()) {
-		isPaused = !isPaused;
-		if (!isPaused) TM.FPSBegin();
-	}
-
-
-	if (!isPaused && !gameOver) {
-		if (IM.IsKeyDown<KEY_BUTTON_UP>()) player.GetGridCoords().second == 0 ? CheckObjectives() : player.MoveUp();
-		if (IM.IsKeyDown<KEY_BUTTON_DOWN>()) player.MoveDown();
-		if (IM.IsKeyDown<KEY_BUTTON_LEFT>()) player.MoveLeft();
-		if (IM.IsKeyDown<KEY_BUTTON_RIGHT>()) player.MoveRight();
-	}
-	else {
-		//TODO Arrows menu
-		if (isPaused) {
+	switch (gameState) {
+		case GameSceneState::PLAYING:
+			if (IM.IsKeyDown<SDLK_ESCAPE>() || IM.IsKeyDown<'p'>()) gameState = GameSceneState::PAUSED;
+			if (gameState == GameSceneState::PLAYING) {
+				if (IM.IsKeyDown<KEY_BUTTON_UP>()) player.GetGridCoords().second == 0 ? CheckObjectives() : player.MoveUp();
+				if (IM.IsKeyDown<KEY_BUTTON_DOWN>()) player.MoveDown();
+				if (IM.IsKeyDown<KEY_BUTTON_LEFT>()) player.MoveLeft();
+				if (IM.IsKeyDown<KEY_BUTTON_RIGHT>()) player.MoveRight();
+			}
+			break;
+		case GameSceneState::PAUSED:
+			if (IM.IsKeyDown<SDLK_ESCAPE>() || IM.IsKeyDown<'p'>()) gameState = GameSceneState::PLAYING;
 			if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>())
 				for (auto it : pauseButtons) if (it.IsMoused()) it.ExecuteBehavior();
-		}
-		else if (gameOver) {
+			break;
+		case GameSceneState::GAMEOVER:
 			if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>())
 				for (auto it : gameOverButtons) if (it.IsMoused()) it.ExecuteBehavior();
-		}
+			break;
 	}
 }
 
@@ -207,21 +254,22 @@ void GameScene::CheckObjectives() {
 	int xDifference;
 	bool validJump = false;
 	for (int i = 0; i < 5; i++) {
-		xDifference = player.GetTransformCoords().first - finishPoints[i].first.first;
+		xDifference = player.GetTransformCoords().first - finishPoints[i].first.transform.x;
 		if (xDifference < 0) xDifference = -xDifference;
 		if (xDifference < CELL_WIDTH) {
 			if (!finishPoints[i].second) {
 				finishPoints[i].second = true;
 				validJump = true;
+				insect.CheckGrabbed(i);
 				break;
 			}
 			else { break; }
-		}			
+		}
 	}
 	if (validJump) {
 		int countAccomplished = 0;
 		for (int i = 0; i < 5; i++)	if (finishPoints[i].second) countAccomplished++;
-		if (countAccomplished == 5) nextLevel = true;
+		if (countAccomplished == 5) NextLevel();
 		player.Reset();
 	}
 	else {
@@ -274,7 +322,7 @@ void GameScene::ControlSpawn() {
 
 
 void GameScene::DrawHud() {
-	debugGrid.Draw(); //Debug grid to easily locate grid cells
+	//debugGrid.Draw(); //Debug grid to easily locate grid cells
 
 	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(m_score),
 	{ 60, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated
@@ -283,4 +331,9 @@ void GameScene::DrawHud() {
 	{W.GetWidth() - 75, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render levelId
 
 	for (int i = 0; i < hpLeft; i++) lifeCounter[i].Draw();
+}
+
+
+void GameScene::NextLevel() {
+
 }

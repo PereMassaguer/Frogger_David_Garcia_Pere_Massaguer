@@ -12,6 +12,7 @@
 #include "ID.hh"
 #include "IOManager.hh"
 #include "InputManager.hh"
+#include "Insect.hh"
 #include "Logger.hh"
 #include "Player.hh"
 #include "Scene.hh"
@@ -28,19 +29,18 @@ class GameScene : public Scene {
 	float velocityMod;
 
 	Player player;
+	std::string playerName;
 	std::vector<Button> pauseButtons;
 	std::vector<Button> gameOverButtons;
 
 	int carAmount;
 	Element *cars;
 	std::vector<Element*> logs; 
-
-	Sprite objectiveMark[5];
-	std::pair<Coord, bool> finishPoints[5];
+	Insect insect;
+	std::pair<Sprite, bool> finishPoints[5];
 	Sprite *lifeCounter;
 
 
-	bool nextLevel;
 	int levelN;
 	Sprite debugGrid;
 public:
@@ -53,13 +53,9 @@ public:
 
 private:
 	void DetectControls();
-
 	void CheckObjectives();
-
 	void ControlSpawn();
-
 	void DrawHud();
-
+	void NextLevel();
 };
-static bool isPaused;
-static bool gameOver;
+static GameSceneState gameState;
