@@ -15,6 +15,7 @@ int main() {
 
 	ofstream file("register.dat", ios::binary);
 
+	//Marca error al strcpy per lo que he fet un cpp nou es diu. RankingBinaryFile2.cpp (On ho he fet amb el mètode explicat a classe). 
 	strcpy(NewScore.Name, "AAA");
 	strcpy(NewScore.Score, "125");
 

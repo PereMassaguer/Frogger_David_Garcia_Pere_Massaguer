@@ -30,6 +30,7 @@
     <ClCompile Include="MainMenuScene.cc" />
     <ClCompile Include="Player.cc" />
     <ClCompile Include="RankingBinaryFile.cpp" />
+    <ClCompile Include="RankingBinaryFile2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assert.hh" />
