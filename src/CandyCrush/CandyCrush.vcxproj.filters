@@ -43,6 +43,9 @@
     <ClCompile Include="Insect.cc">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="RankingBinaryFile.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform.hh">
