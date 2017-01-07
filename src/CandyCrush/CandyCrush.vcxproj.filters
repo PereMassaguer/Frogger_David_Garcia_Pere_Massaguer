@@ -43,10 +43,7 @@
     <ClCompile Include="Insect.cc">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="RankingBinaryFile.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
-    <ClCompile Include="RankingBinaryFile2.cpp">
+    <ClCompile Include="Ranking.cc">
       <Filter>Model</Filter>
     </ClCompile>
   </ItemGroup>
@@ -127,6 +124,9 @@
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="Insect.hh">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ranking.hh">
       <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>

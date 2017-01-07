@@ -33,21 +33,29 @@ void exitGame() {
 }
 
 
+void submitScore() {
+	Rank.AddRankingInfo(playerData);
+	exitGame();
+}
+
+
 GameScene::GameScene(void) : m_grid(){
 	m_background = { { 0, 0, W.GetWidth(), W.GetHeight() }, ObjectID::BGFrogger };
 	debugGrid = { { 0, 30, W.GetWidth(), W.GetHeight() }, ObjectID::GridDebug };
 
-	Button continueButton, exitButton;
+	Button continueButton, submitButton, exitButton;
 	continueButton = Button("CONTINUE", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.4f), 1, 1), WHITE);
-	exitButton = Button("MENU", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.75f), 1, 1), WHITE);
+	submitButton = Button("SUBMIT & EXIT", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.75f), 1, 1), WHITE);
+	exitButton = Button("EXIT", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.75f), 1, 1), WHITE);
 
 	continueButton.SetButtonBehavior(continueGame);
+	submitButton.SetButtonBehavior(submitScore);
 	exitButton.SetButtonBehavior(exitGame);
 
 	pauseButtons.push_back(continueButton);
 	pauseButtons.push_back(exitButton);
 
-	gameOverButtons.push_back(exitButton);
+	gameOverButtons.push_back(submitButton);
 
 
 	finishPoints[0].first.transform = { 38 - CELL_WIDTH / 2, 80 - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT };
@@ -81,12 +89,12 @@ void GameScene::OnEntry(void) {
 	IOManager::LevelParameters("cfg/FroggerLevelSettings.xml", SM.GetCurDifficulty(), hpLeft, velocity, velocityMod);
 
 	gameState = GameSceneState::PLAYING;
+	playerData = PersonData{"",0};
 	levelN = 0;
-	m_score = 0;
 	lifeCounter = new Sprite[hpLeft];
 	for (auto &it : finishPoints) it.second = false;
 	for (int i = 0; i < hpLeft; i++) { 
-		lifeCounter[i].transform = Transform(5 + (i % 5) * CELL_WIDTH / 1.25f, W.GetHeight() - ((i < 5) ? 50 : 30), CELL_WIDTH / 1.25f, CELL_HEIGHT / 1.25f);
+		lifeCounter[i].transform = Transform((int)(5 + (i % 5) * CELL_WIDTH / 1.25f), W.GetHeight() - ((i < 5) ? 50 : 30), (int)(CELL_WIDTH / 1.25f), (int)(CELL_HEIGHT / 1.25f));
 		lifeCounter[i].objectID = ObjectID::FrogIUp;
 	}
 	carAmount = 10 + 2 * levelN;
@@ -148,48 +156,48 @@ void GameScene::Update(void) {
 	
 	}
 	if (gameState == GameSceneState::GAMEOVER) {
-		if (playerName.length() < 8) {
+		std::string t = playerData.name;
+		if (t.size() < 8) {
 			//Deteccion entrada nombre, no conseguimos hacrlo con 2 for, la intencion era recorrer (SDLK_0..SDLK_9),(a..z)
-			if (IM.IsKeyDown<SDLK_0>()) playerName += "0";
-			else if (IM.IsKeyDown<SDLK_1>()) playerName += "1";
-			else if (IM.IsKeyDown<SDLK_2>()) playerName += "2";
-			else if (IM.IsKeyDown<SDLK_3>()) playerName += "3";
-			else if (IM.IsKeyDown<SDLK_4>()) playerName += "4";
-			else if (IM.IsKeyDown<SDLK_5>()) playerName += "5";
-			else if (IM.IsKeyDown<SDLK_6>()) playerName += "6";
-			else if (IM.IsKeyDown<SDLK_7>()) playerName += "7";
-			else if (IM.IsKeyDown<SDLK_8>()) playerName += "8";
-			else if (IM.IsKeyDown<SDLK_9>()) playerName += "9";
-			else if (IM.IsKeyDown<'a'>()) playerName += "A";
-			else if (IM.IsKeyDown<'b'>()) playerName += "B";
-			else if (IM.IsKeyDown<'c'>()) playerName += "C";
-			else if (IM.IsKeyDown<'d'>()) playerName += "D";
-			else if (IM.IsKeyDown<'e'>()) playerName += "E";
-			else if (IM.IsKeyDown<'f'>()) playerName += "F";
-			else if (IM.IsKeyDown<'g'>()) playerName += "G";
-			else if (IM.IsKeyDown<'h'>()) playerName += "H";
-			else if (IM.IsKeyDown<'i'>()) playerName += "I";
-			else if (IM.IsKeyDown<'j'>()) playerName += "J";
-			else if (IM.IsKeyDown<'k'>()) playerName += "K";
-			else if (IM.IsKeyDown<'l'>()) playerName += "L";
-			else if (IM.IsKeyDown<'m'>()) playerName += "M";
-			else if (IM.IsKeyDown<'n'>()) playerName += "N";
-			else if (IM.IsKeyDown<'o'>()) playerName += "O";
-			else if (IM.IsKeyDown<'p'>()) playerName += "P";
-			else if (IM.IsKeyDown<'q'>()) playerName += "Q";
-			else if (IM.IsKeyDown<'r'>()) playerName += "R";
-			else if (IM.IsKeyDown<'s'>()) playerName += "S";
-			else if (IM.IsKeyDown<'t'>()) playerName += "T";
-			else if (IM.IsKeyDown<'u'>()) playerName += "U";
-			else if (IM.IsKeyDown<'v'>()) playerName += "V";
-			else if (IM.IsKeyDown<'w'>()) playerName += "W";
-			else if (IM.IsKeyDown<'x'>()) playerName += "X";
-			else if (IM.IsKeyDown<'y'>()) playerName += "Y";
-			else if (IM.IsKeyDown<'z'>()) playerName += "Z";
+			if (IM.IsKeyDown<SDLK_0>()) playerData.name[t.size()] = '0';
+			else if (IM.IsKeyDown<SDLK_1>()) playerData.name[t.size()] = '1';
+			else if (IM.IsKeyDown<SDLK_2>()) playerData.name[t.size()] = '2';
+			else if (IM.IsKeyDown<SDLK_3>()) playerData.name[t.size()] = '3';
+			else if (IM.IsKeyDown<SDLK_4>()) playerData.name[t.size()] = '4';
+			else if (IM.IsKeyDown<SDLK_5>()) playerData.name[t.size()] = '5';
+			else if (IM.IsKeyDown<SDLK_6>()) playerData.name[t.size()] = '6';
+			else if (IM.IsKeyDown<SDLK_7>()) playerData.name[t.size()] = '7';
+			else if (IM.IsKeyDown<SDLK_8>()) playerData.name[t.size()] = '8';
+			else if (IM.IsKeyDown<SDLK_9>()) playerData.name[t.size()] = '9';
+			else if (IM.IsKeyDown<'a'>()) playerData.name[t.size()] = 'A';
+			else if (IM.IsKeyDown<'b'>()) playerData.name[t.size()] = 'B';
+			else if (IM.IsKeyDown<'c'>()) playerData.name[t.size()] = 'C';
+			else if (IM.IsKeyDown<'d'>()) playerData.name[t.size()] = 'D';
+			else if (IM.IsKeyDown<'e'>()) playerData.name[t.size()] = 'E';
+			else if (IM.IsKeyDown<'f'>()) playerData.name[t.size()] = 'F';
+			else if (IM.IsKeyDown<'g'>()) playerData.name[t.size()] = 'G';
+			else if (IM.IsKeyDown<'h'>()) playerData.name[t.size()] = 'H';
+			else if (IM.IsKeyDown<'i'>()) playerData.name[t.size()] = 'I';
+			else if (IM.IsKeyDown<'j'>()) playerData.name[t.size()] = 'J';
+			else if (IM.IsKeyDown<'k'>()) playerData.name[t.size()] = 'K';
+			else if (IM.IsKeyDown<'l'>()) playerData.name[t.size()] = 'L';
+			else if (IM.IsKeyDown<'m'>()) playerData.name[t.size()] = 'M';
+			else if (IM.IsKeyDown<'n'>()) playerData.name[t.size()] = 'N';
+			else if (IM.IsKeyDown<'o'>()) playerData.name[t.size()] = 'O';
+			else if (IM.IsKeyDown<'p'>()) playerData.name[t.size()] = 'P';
+			else if (IM.IsKeyDown<'q'>()) playerData.name[t.size()] = 'Q';
+			else if (IM.IsKeyDown<'r'>()) playerData.name[t.size()] = 'R';
+			else if (IM.IsKeyDown<'s'>()) playerData.name[t.size()] = 'S';
+			else if (IM.IsKeyDown<'t'>()) playerData.name[t.size()] = 'T';
+			else if (IM.IsKeyDown<'u'>()) playerData.name[t.size()] = 'U';
+			else if (IM.IsKeyDown<'v'>()) playerData.name[t.size()] = 'V';
+			else if (IM.IsKeyDown<'w'>()) playerData.name[t.size()] = 'W';
+			else if (IM.IsKeyDown<'x'>()) playerData.name[t.size()] = 'X';
+			else if (IM.IsKeyDown<'y'>()) playerData.name[t.size()] = 'Y';
+			else if (IM.IsKeyDown<'z'>()) playerData.name[t.size()] = 'Z';
 		}
 		//erase last character
-		if (IM.IsKeyDown<SDLK_BACKSPACE>() && playerName.length() > 0) playerName = playerName.substr(0, playerName.length() - 1);
-		if (IM.IsKeyDown<SDLK_RETURN>() && playerName.length() > 2) gameState = GameSceneState::PLAYING;
+		if (IM.IsKeyDown<SDLK_BACKSPACE>() && t.size() > 0) playerData.name[t.size() - 1] = NULL;
 	}
 }
 
@@ -218,14 +226,14 @@ void GameScene::Draw(void) {
 	case GameSceneState::GAMEOVER:
 		GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK, Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
 		GUI::DrawTextBlended<FontID::ARIAL>("Game over", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.15f), 1, 1), WHITE);
-		for (auto it : gameOverButtons) it.DrawButton();
-		//if (playerName.length() > 2) GUI::DrawTextBlended<FontID::ARIAL>("Press enter to save score", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.25f), 1, 1), WHITE);
+		
+		std::string t = playerData.name;
+		if (t.length() > 2) for (auto it : gameOverButtons) it.DrawButton();
 
-		std::string tempName = playerName;
-		for (int i = playerName.length(); i < 8; i++) tempName += " _";
+		std::string tempName = playerData.name;
+		for (int i = (int)(t.length()); i < 8; i++) tempName += " _";
 		GUI::DrawTextBlended<FontID::ARIAL>("Enter your name(3-8 char)", Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.45f), 1, 1), WHITE);
 		GUI::DrawTextBlended<FontID::ARIAL>(tempName.c_str(), Transform((int)(W.GetWidth() / 2), (int)(W.GetHeight()*0.525f), 1, 1), WHITE);
-		break;
 	}
 }
 
@@ -242,7 +250,7 @@ void GameScene::DetectControls()
 						player.MoveUp();
 						if (player.GetGridCoords().second < GRID_HEIGHT - maxYCoord - 1) {
 							maxYCoord++;
-							m_score += 10;
+							playerData.score += 10;
 						}
 					}	 
 				if (IM.IsKeyDown<KEY_BUTTON_DOWN>()) player.MoveDown();
@@ -256,7 +264,8 @@ void GameScene::DetectControls()
 				for (auto it : pauseButtons) if (it.IsMoused()) it.ExecuteBehavior();
 			break;
 		case GameSceneState::GAMEOVER:
-			if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>())
+			std::string t = playerData.name;
+			if (IM.IsMouseDown<MOUSE_BUTTON_LEFT>() && t.length() > 2)
 				for (auto it : gameOverButtons) if (it.IsMoused()) it.ExecuteBehavior();
 			break;
 	}
@@ -274,7 +283,7 @@ void GameScene::CheckObjectives() {
 				finishPoints[i].second = true;
 				validJump = true;
 				if (insect.CheckGrabbed(i)) {
-					m_score += 200;
+					playerData.score += 200;
 					insect.Reset();
 				}
 				break;
@@ -288,7 +297,7 @@ void GameScene::CheckObjectives() {
 		if (countAccomplished == 5) NextLevel();
 		player.Reset();
 		maxYCoord = 0;
-		m_score += 50 + 10 * timeLeft;
+		playerData.score += (int)(50 + 10 * timeLeft);
 	}
 	else {
 		hpLeft--;
@@ -342,10 +351,10 @@ void GameScene::ControlSpawn() {
 
 void GameScene::DrawHud() {
 	//debugGrid.Draw(); //Debug grid to easily locate grid cells
-	std::string text = "Score: " + std::to_string(m_score);
+	std::string text = "Score: " + std::to_string(playerData.score);
 	std::pair<int, int> textSize;
 	TTF_SizeText(R.GetFont<FontID::ARIAL>(), text.c_str(), &textSize.first, &textSize.second);
-	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(m_score), { 15 + textSize.first / 2, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated
+	GUI::DrawTextBlended<FontID::ARIAL>("Score: " + std::to_string(playerData.score), { 15 + textSize.first / 2, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render score that will be different when updated
 
 	GUI::DrawTextBlended<FontID::ARIAL>("Level " + std::to_string(levelN + 1),
 	{W.GetWidth() - 75, int(W.GetHeight()*.045f), 1, 1 }, WHITE); // Render levelId
@@ -359,6 +368,6 @@ void GameScene::DrawHud() {
 
 void GameScene::NextLevel() {
 	levelN++;
-	m_score += 1000;
+	playerData.score += 1000;
 	for (auto &it : finishPoints) it.second = false;
 }

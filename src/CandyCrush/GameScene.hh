@@ -17,6 +17,7 @@
 #include "Insect.hh"
 #include "Logger.hh"
 #include "Player.hh"
+#include "Ranking.hh"
 #include "Scene.hh"
 #include "System.hh"
 #include "Log.hh"
@@ -25,13 +26,11 @@
 class GameScene : public Scene {
 	Grid m_grid;
 	Sprite m_background;
-	int m_score;
 	int hpLeft;
 	float velocity;
 	float velocityMod;
 
 	Player player;
-	std::string playerName;
 	std::vector<Button> pauseButtons;
 	std::vector<Button> gameOverButtons;
 
@@ -42,9 +41,8 @@ class GameScene : public Scene {
 	std::pair<Sprite, bool> finishPoints[5];
 	Sprite *lifeCounter;
 
-
 	int levelN;
-	int startingTime;
+	float startingTime;
 	float timeLeft;
 	int maxYCoord;
 	Sprite debugGrid;
@@ -64,3 +62,4 @@ private:
 	void NextLevel();
 };
 static GameSceneState gameState;
+static PersonData playerData;

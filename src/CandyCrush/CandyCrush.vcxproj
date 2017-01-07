@@ -29,8 +29,7 @@
     <ClCompile Include="main.cc" />
     <ClCompile Include="MainMenuScene.cc" />
     <ClCompile Include="Player.cc" />
-    <ClCompile Include="RankingBinaryFile.cpp" />
-    <ClCompile Include="RankingBinaryFile2.cpp" />
+    <ClCompile Include="Ranking.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assert.hh" />
@@ -49,6 +48,7 @@
     <ClInclude Include="ID.hh" />
     <ClInclude Include="MainMenuScene.hh" />
     <ClInclude Include="Player.hh" />
+    <ClInclude Include="Ranking.hh" />
     <ClInclude Include="Renderer.hh" />
     <ClInclude Include="Resource.hh" />
     <ClInclude Include="Scene.hh" />

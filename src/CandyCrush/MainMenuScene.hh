@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "Button.hh"
 #include "GUI.hh"
+#include "Ranking.hh"
 #include "Scene.hh"
 #include "System.hh"
 
