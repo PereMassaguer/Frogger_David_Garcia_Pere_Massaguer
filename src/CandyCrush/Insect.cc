@@ -11,6 +11,11 @@ Insect::Insect()
 	isShown = false;
 	sprite.transform = Transform(0, GRID_Y_DISPLACEMENT - CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
 	sprite.objectID = ObjectID::FrogIUp;
+	xPositions[0] = 38 - CELL_WIDTH / 2;
+	xPositions[1] = 122 - CELL_WIDTH / 2;
+	xPositions[2] = 211 - CELL_WIDTH / 2;
+	xPositions[3] = 298 - CELL_WIDTH / 2;
+	xPositions[4] = 382 - CELL_WIDTH / 2;
 }
 
 
@@ -33,7 +38,7 @@ void Insect::Update()
 				}
 			}
 		}
-		sprite.transform.x = CELL_WIDTH * (1 + 2.5f * objectiveId);
+		sprite.transform.x = xPositions[objectiveId];
 	}
 }
 

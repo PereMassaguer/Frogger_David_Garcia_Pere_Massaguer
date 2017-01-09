@@ -4,7 +4,7 @@
 
 Ranking::Ranking()
 {
-	std::fstream file("register.dat", std::ios::out | std::ios::binary);
+	std::fstream file("register.dat", std::ios::out | std::ios::binary | std::ios::app);
 	file.close();
 }
 

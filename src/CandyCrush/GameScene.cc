@@ -72,8 +72,8 @@ GameScene::GameScene(void) : m_grid(){
 
 
 GameScene::~GameScene(void){
-
-
+	delete[] cars;
+	delete[] lifeCounter;
 }
 
 
@@ -108,8 +108,7 @@ void GameScene::OnEntry(void) {
 
 
 void GameScene::OnExit(void) {
-	delete[] cars;
-	delete[] lifeCounter;
+
 }
 
 void GameScene::Update(void) {
@@ -135,7 +134,7 @@ void GameScene::Update(void) {
 		}
 		for (int i = 0; i < carAmount; i++) {
 			behaviors = cars[i].CoordBehavior();
-			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);
+			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);//HEAP ERROR
 		}
 		ControlSpawn();
 		insect.Update();
@@ -144,13 +143,14 @@ void GameScene::Update(void) {
 		case BehaviorID::SAFE:
 			break;
 		case BehaviorID::RIP:
-			hpLeft--;
+			hpLeft--; 
+			m_grid.GetBehavior(Coord(player.GetGridCoords()));
 			player.Reset();
 			maxYCoord = 0;
 			break;
 		}
 		if (hpLeft <= 0) { gameState = GameSceneState::GAMEOVER; }
-		m_grid.DebugGrid(10);//See colliders on console (int refresh frequency ms)
+		//m_grid.DebugGrid();//See colliders on console (int refresh frequency ms)
 	}
 	if (gameState == GameSceneState::PAUSED) {
 	
@@ -310,16 +310,16 @@ void GameScene::CheckObjectives() {
 
 void GameScene::ControlSpawn() {
 	for (int i = 0; i < 5; i++) {
+		Element *auxElement = new Log(i);
 		if (i % 2 == 0) {
 			if (m_grid.GetBehavior(Coord(0, i)) != BehaviorID::SAFE && m_grid.GetBehavior(Coord(1, i)) != BehaviorID::SAFE && m_grid.GetBehavior(Coord(2, i)) != BehaviorID::SAFE) {
-				Element *auxElement = new Log(i);
 				logs.push_back(auxElement);
 			}
 		}
-		else {
+		else if (i % 2 != 0) {
 			if (m_grid.GetBehavior(Coord(GRID_WIDTH - 1, i)) != BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 2, i)) != BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 3, i)) != BehaviorID::SAFE) {
 				Element *auxElement = new Log(i);
-				logs.push_back(auxElement);
+				logs.push_back(auxElement);//HEAP ERROR
 			}
 		}
 	}

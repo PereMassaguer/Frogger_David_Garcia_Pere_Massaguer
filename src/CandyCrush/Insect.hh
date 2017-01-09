@@ -13,6 +13,7 @@ class Insect
 	int objectiveId;
 	Sprite sprite;
 	bool objectivesArrived[5];
+	int xPositions[5];
 public:
 	Insect();
 	~Insect();

@@ -23,5 +23,4 @@ public:
 	void Draw();
 	virtual bool ExitedMap() = 0;
 	std::vector<std::pair<Coord, BehaviorID>> CoordBehavior();
-	//std::vector<std::pair<Coord, BehaviorID>> CoordBehavior(std::vector<std::pair<Coord, BehaviorID>>& ret);
 };

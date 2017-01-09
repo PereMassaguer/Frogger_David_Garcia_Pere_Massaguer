@@ -3,6 +3,8 @@
 
 class Log: public Element
 {
+	int timeToDestroy;
+
 public:
 	Log();
 	Log(int row);
