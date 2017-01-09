@@ -19,7 +19,7 @@ public:
 	void MoveLeft();
 	void MoveRight();
 	void Draw();
-	void Update();
+	void Update(float velocity);
 	void Reset();
 	Coord GetGridCoords();
 	Coord GetTransformCoords();

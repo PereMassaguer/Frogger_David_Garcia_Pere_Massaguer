@@ -50,11 +50,11 @@ void Player::Draw()
 	sprite.Draw();
 }
 
-void Player::Update()
+void Player::Update(float velocity)
 {
 	int row = GetGridCoords().second;
 	if (row < 5) {
-		acumulateX += TM.GetDeltaTime() / 20.0f;
+		acumulateX += TM.GetDeltaTime() / 30.0f * velocity;
 		if (acumulateX >= 1.0f) {
 			sprite.transform.x += (row % 2 == 0) ? (int)acumulateX : (int)-acumulateX;
 			acumulateX -= (int)acumulateX;

@@ -18,9 +18,9 @@ Element::~Element()
 
 }
 
-void Element::Update()
+void Element::Update(float vFactor)
 {	
-	acumulateX += TM.GetDeltaTime() / 20.0f;
+	acumulateX += TM.GetDeltaTime() / 30.0f * vFactor;
 	if (acumulateX >= 1.0f) {
 		sprite.transform.x += direction * (int)acumulateX;
 		acumulateX -= (int)acumulateX;

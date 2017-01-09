@@ -118,14 +118,16 @@ void GameScene::Update(void) {
 
 	if (gameState == GameSceneState::PLAYING) {
 		timeLeft < 0.0f ? gameState = GameSceneState::GAMEOVER : timeLeft -= TM.GetDeltaTime()/1000;
-		std::vector<std::pair<Coord, BehaviorID>> behaviors;
 		m_grid.ResetGrid();
-		player.Update();
 
-		for (int i = 0; i < carAmount; i++) cars[i].Update();
+		float currentVelocity = velocity + playerData.score / 5000;
+		player.Update(currentVelocity);
+		for (int i = 0; i < logs.size(); i++) logs[i]->Update(currentVelocity);
+		for (int i = 0; i < carAmount; i++) cars[i].Update(currentVelocity);
+		insect.Update();
 
+		std::vector<std::pair<Coord, BehaviorID>> behaviors;
 		for (int i = 0; i < logs.size(); i++) {
-			logs[i]->Update();
 			if (logs[i]->ExitedMap()) logs.erase(logs.begin() + i);
 			else {
 				behaviors = logs[i]->CoordBehavior();
@@ -137,7 +139,6 @@ void GameScene::Update(void) {
 			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);//HEAP ERROR
 		}
 		ControlSpawn();
-		insect.Update();
 
 		switch (m_grid.GetBehavior(Coord(player.GetGridCoords()))) {
 		case BehaviorID::SAFE:
@@ -150,10 +151,6 @@ void GameScene::Update(void) {
 			break;
 		}
 		if (hpLeft <= 0) { gameState = GameSceneState::GAMEOVER; }
-		//m_grid.DebugGrid();//See colliders on console (int refresh frequency ms)
-	}
-	if (gameState == GameSceneState::PAUSED) {
-	
 	}
 	if (gameState == GameSceneState::GAMEOVER) {
 		std::string t = playerData.name;

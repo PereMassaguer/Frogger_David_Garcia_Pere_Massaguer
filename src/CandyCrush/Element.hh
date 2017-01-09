@@ -19,7 +19,7 @@ public:
 	Element(int row);
 	~Element();
 
-	void Update();
+	void Update(float vFactor);
 	void Draw();
 	virtual bool ExitedMap() = 0;
 	std::vector<std::pair<Coord, BehaviorID>> CoordBehavior();
