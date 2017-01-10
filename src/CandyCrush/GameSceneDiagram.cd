@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameScene" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAEAAiIEgAAAEAAJoAAAoGYAAABAA0AAAAwAAE=</HashCode>
+      <FileName>GameScene.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="0.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABEAAAAAAAgAAoAAAAAAAQAAQAAAAAAMAAAAAAAA=</HashCode>
+      <FileName>Scene.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Log" Collapsed="true">
+    <Position X="2" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAgAAYAAAAAAAAAAAAA=</HashCode>
+      <FileName>Log.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Element" Collapsed="true">
+    <Position X="3" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAACAAABIgAAAIwIAAgAABAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Element.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Car" Collapsed="true">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Car.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button" Collapsed="true">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAAAAAAAggAAAAAAACAAgiAAEAAgIAAAAAAEAAAA=</HashCode>
+      <FileName>Button.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grid" Collapsed="true">
+    <Position X="5.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAAggAAAAAAAhAAAAAAAAAAAAAAAAAAAAAgAQA=</HashCode>
+      <FileName>Grid.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAAAIAAAAABgAAAACAAAAAABAAAAAIRAAYAQAAABA=</HashCode>
+      <FileName>Player.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Insect" Collapsed="true">
+    <Position X="5.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAAAAgAACFhAgAAACAAAgABAKAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Insect.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -16,6 +16,7 @@ Insect::Insect()
 	xPositions[2] = 211 - CELL_WIDTH / 2;
 	xPositions[3] = 298 - CELL_WIDTH / 2;
 	xPositions[4] = 382 - CELL_WIDTH / 2;
+	for (int i = 0; i < 5; i++) objectivesArrived[i] = false;
 }
 
 

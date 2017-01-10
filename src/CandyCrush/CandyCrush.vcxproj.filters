@@ -130,4 +130,9 @@
       <Filter>Controller</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MainMenuScene.cd" />
+    <None Include="GameSceneDiagram.cd" />
+    <None Include="GlobalDiagram.cd" />
+  </ItemGroup>
 </Project>

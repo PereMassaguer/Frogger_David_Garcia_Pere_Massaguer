@@ -10,6 +10,7 @@ Element::Element(int row)
 {
 	acumulateX = 0.0f;
 	spawningRow = row;
+	vElementTypeFactor = 1.0f;
 }
 
 
@@ -20,7 +21,7 @@ Element::~Element()
 
 void Element::Update(float vFactor)
 {	
-	acumulateX += TM.GetDeltaTime() / 30.0f * vFactor;
+	acumulateX += TM.GetDeltaTime() / 30.0f * vFactor * vElementTypeFactor;
 	if (acumulateX >= 1.0f) {
 		sprite.transform.x += direction * (int)acumulateX;
 		acumulateX -= (int)acumulateX;

@@ -13,6 +13,7 @@ protected:
 	int spawningRow;
 	int direction;
 	BehaviorID behavior;
+	float vElementTypeFactor;
 
 public:
 	Element();

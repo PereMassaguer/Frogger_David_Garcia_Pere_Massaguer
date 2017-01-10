@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MainMenuScene" Collapsed="true">
+    <Position X="4.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAIAAAAgAAIAAAAAAAAAAQAAEAAAEAAAAAAAA=</HashCode>
+      <FileName>MainMenuScene.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameScene" Collapsed="true">
+    <Position X="9.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAEAAiIEgAAAEAAJoAAAoGYAAABAA0AAAAwAAE=</HashCode>
+      <FileName>GameScene.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button" Collapsed="true">
+    <Position X="7" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAAAAAAAggAAAAAAACAAgiAAEAAgIAAAAAAEAAAA=</HashCode>
+      <FileName>Button.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Element" Collapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAACAAABIgAAAIwIAAgAABAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Element.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Car" Collapsed="true">
+    <Position X="11.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Car.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Log" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAgAAYAAAAAAAAAAAAA=</HashCode>
+      <FileName>Log.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Insect" Collapsed="true">
+    <Position X="11.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAAAAgAACFhAgAAACAAAgABAKAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Insect.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ranking" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQgAAAAABAAAAQAAAABAAAAA=</HashCode>
+      <FileName>Ranking.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputManager" Collapsed="true">
+    <Position X="7" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAAAAAAFEAAIAIgAICAAICAQAAAFQAAgYAAgAAA=</HashCode>
+      <FileName>InputManager.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager" Collapsed="true">
+    <Position X="7" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAEAAAAAQCAAAQAEQAAAASAAgAIAAAAQ=</HashCode>
+      <FileName>SceneManager.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimeManager" Collapsed="true">
+    <Position X="7" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAQAQAAAAAAQgAAAEAAAAAAQAAgAAAAAAA=</HashCode>
+      <FileName>TimeManager.hh</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Color" Collapsed="true">
+    <Position X="11.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEEAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Color.hh</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

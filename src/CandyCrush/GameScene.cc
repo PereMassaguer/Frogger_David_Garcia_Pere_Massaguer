@@ -100,7 +100,7 @@ void GameScene::OnEntry(void) {
 	carAmount = 10 + 2 * levelN;
 	cars = new Car[carAmount];
 	for (int i = 0; i < carAmount; i++) cars[i] = Car(rand() % 5 + 6);
-	insect.Reset();
+	insect = Insect();
 	maxYCoord = 0;
 	startingTime = 120 / velocityMod;
 	timeLeft = startingTime;
@@ -323,20 +323,22 @@ void GameScene::ControlSpawn() {
 
 	for (int j = 0; j < carAmount; j++) {
 		if (cars[j].ExitedMap()) {
+			int randAux = rand() % 5;
 			for (int i = 6; i < GRID_HEIGHT - 1; i++) {
-				if (i % 2 == 0) {
-					if (m_grid.GetBehavior(Coord(GRID_WIDTH - 1, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 2, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 3, i)) == BehaviorID::SAFE) {
-						cars[j] = Car(i);
+				int index = 6 + (i + randAux) % 5;
+				if (index % 2 == 0) {
+					if (m_grid.GetBehavior(Coord(GRID_WIDTH - 1, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 2, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 3, index)) == BehaviorID::SAFE) {
+						cars[j] = Car(index);
 						BehaviorID aux = BehaviorID::RIP;
-						m_grid.SetBehavior(Coord(GRID_WIDTH - 1, i), aux);
+						m_grid.SetBehavior(Coord(GRID_WIDTH - 1, index), aux);
 						break;
 					}
 				}
 				else {
-					if (m_grid.GetBehavior(Coord(0, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(1, i)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(2, i)) == BehaviorID::SAFE) {
-						cars[j] = Car(i);
+					if (m_grid.GetBehavior(Coord(0, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(1, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(2, index)) == BehaviorID::SAFE) {
+						cars[j] = Car(index);
 						BehaviorID aux = BehaviorID::RIP;
-						m_grid.SetBehavior(Coord(0, i), aux);
+						m_grid.SetBehavior(Coord(0, index), aux);
 						break;
 					}
 				}
@@ -367,4 +369,12 @@ void GameScene::NextLevel() {
 	levelN++;
 	playerData.score += 1000;
 	for (auto &it : finishPoints) it.second = false;
+	player.Reset();
+	insect = Insect();
+	insect.Reset();
+
+	delete[] cars;
+	carAmount = 10 + 2 * levelN;
+	cars = new Car[carAmount];
+	for (int i = 0; i < carAmount; i++) cars[i] = Car(rand() % 5 + 6);
 }

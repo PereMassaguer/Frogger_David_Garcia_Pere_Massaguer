@@ -19,6 +19,5 @@ public:
 	void Update(void) override;
 	void Draw(void) override;
 
-	void setMenuSceneState(MenuSceneState v);
 };
 static MenuSceneState menuSceneState;

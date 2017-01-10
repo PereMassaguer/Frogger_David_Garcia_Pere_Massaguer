@@ -128,8 +128,3 @@ void MainMenuScene::Draw(void)
 
 	for (auto it : buttons[(int)menuSceneState]) it.DrawButton();
 }
-
-void MainMenuScene::setMenuSceneState(MenuSceneState v)
-{
-	menuSceneState = v;
-}

@@ -3,7 +3,7 @@
 	<constants kValue="1" zValue="1"/>
 	<difficulty difficultyID="0">
 		<difficultyName>EASY</>
-		<param livesFactor="10" velocity0Factor="1" velocityMod="1"/>
+		<param livesFactor="10" velocity0Factor="1.5" velocityMod="1"/>
 	</difficulty>
 	
 	<difficulty difficultyID="1">
@@ -13,6 +13,6 @@
 	
 	<difficulty difficultyID="2">
 		<difficultyName>HARD</>
-		<param livesFactor="1" velocity0Factor="3" velocityMod="2.5"/>
+		<param livesFactor="1" velocity0Factor="2.5" velocityMod="2.5"/>
 	</difficulty>
 </level>
