@@ -11,7 +11,7 @@
 #define SCREEN_HEIGHT 560
 
 int main(int argc, char* args[]) {
-	GameEngine::Run<SCREEN_WIDTH, SCREEN_HEIGHT>("Open Frogger 2017 Pere Massaguer  David Garcia");
+	GameEngine::Run<SCREEN_WIDTH, SCREEN_HEIGHT>("Open Frogger 2017 Pere Massaguer David Garcia");
 	
 	return 0;
 }

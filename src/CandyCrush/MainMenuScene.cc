@@ -104,7 +104,7 @@ void MainMenuScene::Draw(void)
 {
 	//Black BackGround
 	GUI::DrawRectangle(std::make_pair(W.GetWidth(), W.GetHeight()), BLACK, Transform(W.GetWidth() / 2, W.GetHeight() / 2, 1, 1));
-	GUI::DrawTextShaded<FontID::ARIAL>("PD: Frogger", { W.GetWidth() / 2, int(W.GetHeight()*.1f), 1, 1 }, WHITE, BLACK);
+	GUI::DrawTextShaded<FontID::ARIAL>("Open Frogger 2017", { W.GetWidth() / 2, int(W.GetHeight()*.1f), 1, 1 }, WHITE, BLACK);
 
 	
 	if (menuSceneState == MenuSceneState::RANKING) {
