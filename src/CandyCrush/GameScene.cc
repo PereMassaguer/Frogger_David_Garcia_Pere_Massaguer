@@ -67,7 +67,6 @@ GameScene::GameScene(void) : m_grid(){
 		it.second = false;
 		it.first.objectID = ObjectID::ObjectiveDone;
 	}
-
 }
 
 

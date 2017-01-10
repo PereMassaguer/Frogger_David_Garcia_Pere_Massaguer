@@ -10,7 +10,7 @@ Log::Log(int row) : Element(row)
 {
 	behavior = BehaviorID::SAFE;
 	direction = spawningRow % 2 == 0 ? 1 : -1;
-	timeToDestroy = 15000;
+	timeToDestroy = 25000;
 
 	int lenght = rand() % 3;
 	switch (lenght) {
