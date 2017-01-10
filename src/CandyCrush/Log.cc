@@ -41,10 +41,4 @@ bool Log::ExitedMap()
 {
 	timeToDestroy -= TM.GetDeltaTime();
 	return timeToDestroy < 0 ? true : false;
-	/*if (spawningRow % 2 == 0 && sprite.transform.x > W.GetWidth())
-		return true;
-	else if (spawningRow % 2 != 0 && sprite.transform.x < -CELL_WIDTH * size)
-		return true;
-	else
-		return false;*/
 }

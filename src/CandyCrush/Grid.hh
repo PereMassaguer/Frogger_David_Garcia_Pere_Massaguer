@@ -14,8 +14,6 @@
 
 
 class Grid {
-	//inline ObjectID &CandyID(int i, int j) const { return cellData[i][j].candy.objectID; }
-	//inline Transform &CandyTransform(int i, int j) const { return cellData[i][j].candy.transform; }
 
 	struct Cell { BehaviorID behaviorId; };
 	Cell **cellData;
