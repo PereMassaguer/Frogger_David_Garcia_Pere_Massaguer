@@ -120,8 +120,8 @@ void MainMenuScene::Draw(void)
 		}
 	}
 	else if (menuSceneState == MenuSceneState::CREDITS) {
-		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "David Garcia Poyo", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() / 2 - 75, 1, 1));
-		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "Pere Massaguer Vila", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() / 2 - 25, 1, 1));
+		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "Pere Massaguer Vila", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() / 2 - 75, 1, 1));
+		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "David Garcia Poyo", WHITE), Transform(W.GetWidth() / 2, W.GetHeight() / 2 - 25, 1, 1));
 	}
 	else if(menuSceneState == MenuSceneState::DIFFICULTY)
 		R.Push(TTF_RenderText_Blended(R.GetFont<FontID::ARIAL>(), "Select difficulty", WHITE), Transform(W.GetWidth() / 2, (int)(W.GetHeight() *0.375f), 1, 1));
