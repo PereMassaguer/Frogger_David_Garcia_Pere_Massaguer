@@ -46,6 +46,7 @@
     <ClCompile Include="Ranking.cc">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="GameIAScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform.hh">
@@ -129,6 +130,7 @@
     <ClInclude Include="Ranking.hh">
       <Filter>Controller</Filter>
     </ClInclude>
+    <ClInclude Include="GameIAScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MainMenuScene.cd" />

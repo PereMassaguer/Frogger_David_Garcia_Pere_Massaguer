@@ -9,12 +9,9 @@
 
 #pragma region GAME_SCENES
 #include "GameScene.hh"
+#include "GameIAScene.h"
 #include "MainMenuScene.hh"
 #pragma endregion TODO
-//Music
-//#include<sdl.h>
-//#include<stdio.h>
-//#include<SDL_mixer.h>
 
 //! Initializes game needs and controls the game loop
 namespace GameEngine {
@@ -24,9 +21,10 @@ namespace GameEngine {
 		R.LoadTexture<ObjectID::BGFrogger>("gfx/BGFrogger.jpg");
 		R.LoadTexture<ObjectID::GridDebug>("gfx/GridDebug.png");
 		R.LoadTexture<ObjectID::FrogIUp>("gfx/FrogIdleUP.png");
-		R.LoadTexture<ObjectID::FragIRight>("gfx/FrogIdleRight.png");
+		R.LoadTexture<ObjectID::FrogIRight>("gfx/FrogIdleRight.png");
 		R.LoadTexture<ObjectID::FrogIDown>("gfx/FrogIdleDown.png");
 		R.LoadTexture<ObjectID::FrogILeft>("gfx/FrogIdleLeft.png");
+		R.LoadTexture<ObjectID::BotIUp>("gfx/BotIdleUp.png");
 		R.LoadTexture<ObjectID::Log_1>("gfx/Log_1.png");
 		R.LoadTexture<ObjectID::Log_2>("gfx/Log_2.png");
 		R.LoadTexture<ObjectID::Log_3>("gfx/Log_3.png");
@@ -43,6 +41,7 @@ namespace GameEngine {
 	void AddScenes(void) {
 		SM.AddScene<MainMenuScene>();
 		SM.AddScene<GameScene>();
+		SM.AddScene<GameIAScene>();
 		SM.SetCurScene<MainMenuScene>();
 	}
 	/** 

@@ -9,9 +9,11 @@ class Player
 {
 	Sprite sprite;
 	float acumulateX;
+	int startX;
 
 public:
 	Player();
+	Player(int xPos);
 	~Player();
 
 	void MoveUp();

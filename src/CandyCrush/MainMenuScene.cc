@@ -1,5 +1,6 @@
 #include "MainMenuScene.hh"
 #include "GameScene.hh"
+#include "GameIAScene.h"
 
 void SelectDifficultyVoid() {
 	menuSceneState = MenuSceneState::DIFFICULTY;
@@ -17,6 +18,10 @@ void StartMediumGameVoid() {
 void StartHardGameVoid() {
 	SM.SetCurDifficulty(Difficulty::HARD);
 	SM.SetCurScene<GameScene>();
+}
+
+void StartIAGameVoid() {
+	SM.SetCurScene<GameIAScene>();
 }
 
 void BackToDefaultVoid() {
@@ -40,10 +45,11 @@ void ExitGameVoid() {
 MainMenuScene::MainMenuScene()
 {
 	//Call button constructor
-	Button playButton, rankingButton, creditsButton, exitButton;
+	Button playButton, playIAButton, rankingButton, creditsButton, exitButton;
 	playButton = Button("PLAY", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 100, 1, 1), WHITE);
-	rankingButton = Button("RANKING", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 25, 1, 1), WHITE);
-	creditsButton = Button("CREDITS", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 50, 1, 1), WHITE);
+	playIAButton = Button("vs IA", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) - 25, 1, 1), WHITE);
+	rankingButton = Button("RANKING", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 50, 1, 1), WHITE);
+	creditsButton = Button("CREDITS", Transform(W.GetWidth() / 2, (W.GetHeight() / 2) + 125, 1, 1), WHITE);
 	exitButton = Button("EXIT", Transform(W.GetWidth() / 2, (int)(W.GetHeight() * 0.85f), 1, 1), WHITE);
 	
 	Button easyButton, mediumButton, hardButton, backButton;
@@ -54,6 +60,7 @@ MainMenuScene::MainMenuScene()
 	
 	//Set each button behavior
 	playButton.SetButtonBehavior(SelectDifficultyVoid);
+	playIAButton.SetButtonBehavior(StartIAGameVoid);
 	rankingButton.SetButtonBehavior(ShowRankingVoid);
 	creditsButton.SetButtonBehavior(ShowCreditsVoid);
 	exitButton.SetButtonBehavior(ExitGameVoid);
@@ -66,6 +73,7 @@ MainMenuScene::MainMenuScene()
 
 	//Allocate buttons on a Vectors Array
 	buttons[(int)MenuSceneState::DEFAULT].push_back(playButton);
+	buttons[(int)MenuSceneState::DEFAULT].push_back(playIAButton);
 	buttons[(int)MenuSceneState::DEFAULT].push_back(rankingButton);
 	buttons[(int)MenuSceneState::DEFAULT].push_back(creditsButton);
 	buttons[(int)MenuSceneState::DEFAULT].push_back(exitButton);

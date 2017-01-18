@@ -7,6 +7,16 @@ Player::Player()
 	ResetTransform();
 	sprite.objectID = ObjectID::FrogIUp;
 	float acumulateX = 0.0f;
+	startX = 0;
+}
+
+Player::Player(int xPos)
+{
+	ResetTransform();
+	sprite.objectID = ObjectID::FrogIUp;
+	float acumulateX = 0.0f;
+	startX = xPos;
+	sprite.transform.x += xPos;
 }
 
 Player::~Player()
@@ -41,7 +51,7 @@ void Player::MoveRight()
 {
 	if (sprite.transform.x <= (GRID_WIDTH - 2) * CELL_WIDTH)
 		sprite.transform.x += CELL_WIDTH;
-		sprite.objectID = ObjectID::FragIRight;
+		sprite.objectID = ObjectID::FrogIRight;
 }
 
 
@@ -90,7 +100,7 @@ Coord Player::GetTransformCoords()
 
 void Player::ResetTransform()
 {
-	sprite.transform = { (GRID_WIDTH / 2) * CELL_WIDTH, (GRID_HEIGHT - 1) * CELL_HEIGHT + GRID_Y_DISPLACEMENT, 30, 30 };
+	sprite.transform = { (GRID_WIDTH / 2) * CELL_WIDTH + startX, (GRID_HEIGHT - 1) * CELL_HEIGHT + GRID_Y_DISPLACEMENT, 30, 30 };
 }
 
 void Player::CenterToClosestCell()

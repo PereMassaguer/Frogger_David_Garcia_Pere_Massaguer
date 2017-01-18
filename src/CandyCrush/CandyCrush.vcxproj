@@ -22,6 +22,7 @@
     <ClCompile Include="Button.cc" />
     <ClCompile Include="Car.cc" />
     <ClCompile Include="Element.cc" />
+    <ClCompile Include="GameIAScene.cpp" />
     <ClCompile Include="GameScene.cc" />
     <ClCompile Include="Grid.cc" />
     <ClCompile Include="Insect.cc" />
@@ -38,6 +39,7 @@
     <ClInclude Include="Color.hh" />
     <ClInclude Include="Element.hh" />
     <ClInclude Include="GameEngine.hh" />
+    <ClInclude Include="GameIAScene.h" />
     <ClInclude Include="GameScene.hh" />
     <ClInclude Include="Grid.hh" />
     <ClInclude Include="InputManager.hh" />

@@ -25,7 +25,7 @@ public:
 	~Grid();
 
 	void SetBehavior(std::vector<std::pair<Coord, BehaviorID>> &behaviors);
-	void SetBehavior(Coord &coord, BehaviorID &behavior);
+	void SetBehavior(std::pair<Coord, BehaviorID> &data);
 	BehaviorID GetBehavior(Coord &pos);
 	void ResetGrid();
 

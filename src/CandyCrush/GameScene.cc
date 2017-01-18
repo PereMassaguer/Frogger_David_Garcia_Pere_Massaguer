@@ -130,12 +130,12 @@ void GameScene::Update(void) {
 			if (logs[i]->ExitedMap()) logs.erase(logs.begin() + i);
 			else {
 				behaviors = logs[i]->CoordBehavior();
-				for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);
+				for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j]);
 			}
 		}
 		for (int i = 0; i < carAmount; i++) {
 			behaviors = cars[i].CoordBehavior();
-			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j].first, behaviors[j].second);//HEAP ERROR
+			for (int j = 0; j < behaviors.size(); j++)  m_grid.SetBehavior(behaviors[j]);//HEAP ERROR
 		}
 		ControlSpawn();
 
@@ -329,7 +329,7 @@ void GameScene::ControlSpawn() {
 					if (m_grid.GetBehavior(Coord(GRID_WIDTH - 1, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 2, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(GRID_WIDTH - 3, index)) == BehaviorID::SAFE) {
 						cars[j] = Car(index);
 						BehaviorID aux = BehaviorID::RIP;
-						m_grid.SetBehavior(Coord(GRID_WIDTH - 1, index), aux);
+						m_grid.SetBehavior(std::make_pair(Coord(GRID_WIDTH - 1, index), aux));
 						break;
 					}
 				}
@@ -337,7 +337,7 @@ void GameScene::ControlSpawn() {
 					if (m_grid.GetBehavior(Coord(0, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(1, index)) == BehaviorID::SAFE && m_grid.GetBehavior(Coord(2, index)) == BehaviorID::SAFE) {
 						cars[j] = Car(index);
 						BehaviorID aux = BehaviorID::RIP;
-						m_grid.SetBehavior(Coord(0, index), aux);
+						m_grid.SetBehavior(std::make_pair(Coord(0, index), aux));
 						break;
 					}
 				}

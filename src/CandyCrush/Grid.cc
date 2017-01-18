@@ -35,9 +35,9 @@ void Grid::SetBehavior(std::vector<std::pair<Coord, BehaviorID>> &behaviors)
 }
 
 
-void Grid::SetBehavior(Coord &coord, BehaviorID &behavior)
+void Grid::SetBehavior(std::pair<Coord, BehaviorID> &data)
 {
-	cellData[coord.second][coord.first].behaviorId = behavior;
+	cellData[data.first.second][data.first.first].behaviorId = data.second;
 }
 
 
